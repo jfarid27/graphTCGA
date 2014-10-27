@@ -1,0 +1,18 @@
+{
+  "name": "graphTCGA",
+  "version": "0.0.0",
+  "description": "Server for Panda built TCGA network",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jfarid27/graphTCGA.git"
+  },
+  "author": "J. Farid",
+  "license": "GPL2",
+  "bugs": {
+    "url": "https://github.com/jfarid27/graphTCGA/issues"
+  }
+}
