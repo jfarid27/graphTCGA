@@ -21,7 +21,7 @@ var bufferDataEmitter = function(stream){
 };
 util.inherits(bufferDataEmitter, events.EventEmitter)
 
-exports.bufferDataEmitter = bufferedEmitter
+exports.bufferDataEmitter = bufferDataEmitter
 exports.connectToStream = function(stream){
   return new bufferDataEmitter(stream);
 }
