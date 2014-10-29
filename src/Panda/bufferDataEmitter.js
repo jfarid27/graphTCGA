@@ -5,18 +5,23 @@ var bufferDataEmitter = function(stream){
     var self = this;
     events.EventEmitter.call(self)
 
-    var buffer = [];
+    var stringBuffer = '';
 
     stream.on('data', function(chunk){
-      buffer.push(chunk.toString())
+      stringBuffer = stringBuffer.concat(chunk.toString())
     })
 
     stream.once('close', function(){
-      self.emit('close', buffer); 
+      console.log(stringBuffer)
+      var arrayOfLines = stringBuffer.split('\n');
+      var arrayOfLinesSplit = arrayOfLines.map(function(line){
+        return line.split('\t')
+      })
+      self.emit('close', arrayOfLinesSplit); 
     })
 
-    stream.on('error', function(){
-      self.emit('error')
+    stream.on('error', function(error){
+      self.emit('error', error)
     })
 };
 util.inherits(bufferDataEmitter, events.EventEmitter)
