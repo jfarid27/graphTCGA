@@ -1,7 +1,7 @@
 var events = require('events'),
   util = require('util');
 
-var readableStreamBufferEmitter = function(readableStream){
+var readableStreamBufferEmitter = function(readableStream, callback){
     var self = this;
     events.EventEmitter.call(self)
 
@@ -16,7 +16,8 @@ var readableStreamBufferEmitter = function(readableStream){
       var arrayOfLinesSplit = arrayOfLines.map(function(line){
         return line.split('\t')
       })
-      self.emit('close', arrayOfLinesSplit); 
+      self.emit('close', arrayOfLinesSplit);
+      callback(arrayOfLinesSplit); 
     })
 
     readableStream.on('error', function(error){
