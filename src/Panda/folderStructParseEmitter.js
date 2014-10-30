@@ -7,27 +7,27 @@ var folderStructParseEmitter = function(path){
   var self = this;
   events.EventEmitter.call(self)
 
-  self.on('subfolders', function(params, callback){
+  self.on('subfolders', function(params, callback, err){
 
     var response = fileStructure.folders
       .map(function(folder){ return folder.name }) 
-
-    self.emit('subFoldersResponse', response)
 
     callback(response)
 
   })
 
-  self.on('listFiles', function(params, callback){
+  self.on('listFiles', function(params, callback, err){
  
     var folder = fileStructure.folders
       .filter(function(folder){ return (params.folder == folder.name) })[0]
 
-    var response = folder.files
+    if (folder && folder.files) {
+      var response = folder.files
+      callback(response)
+    } else {
+      err("Matched folder error")
+    }
 
-    self.emit('listFilesResponse', response)
-    
-    callback(response)
   })
 
 };

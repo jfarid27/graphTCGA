@@ -27,6 +27,6 @@ var readableStreamBufferEmitter = function(readableStream, callback){
 util.inherits(readableStreamBufferEmitter, events.EventEmitter)
 
 exports.readableStreamBufferEmitter = readableStreamBufferEmitter
-exports.connectToStream = function(stream){
-  return new readableStreamBufferEmitter(stream);
+exports.connectToStream = function(stream, callback){
+  return new readableStreamBufferEmitter(stream, callback);
 }
