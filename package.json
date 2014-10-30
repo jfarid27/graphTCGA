@@ -14,5 +14,8 @@
   "license": "GPL2",
   "bugs": {
     "url": "https://github.com/jfarid27/graphTCGA/issues"
+  },
+  "dependencies": {
+    "express": "~4.10.1"
   }
 }
