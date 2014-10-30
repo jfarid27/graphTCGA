@@ -4,7 +4,8 @@
   "description": "Server for Panda built TCGA network",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -14,5 +15,8 @@
   "license": "GPL2",
   "bugs": {
     "url": "https://github.com/jfarid27/graphTCGA/issues"
+  },
+  "dependencies": {
+    "express": "~4.10.1"
   }
 }
