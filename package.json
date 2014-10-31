@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev-server": "./node_modules/mocha/bin/mocha --reporter spec -w",
+    "test-verbose": "./node_modules/mocha/bin/mocha -reporter spec"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
     "express": "~4.10.1"
   },
   "devDependencies": {
-    "mocha": "~2.0.1"
+    "mocha": "~2.0.1",
+    "should": "~4.1.0"
   }
 }
