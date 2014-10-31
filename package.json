@@ -4,7 +4,7 @@
   "description": "Server for Panda built TCGA network",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "./node_modules/mocha/bin/mocha",
     "start": "node index.js"
   },
   "repository": {
@@ -18,5 +18,8 @@
   },
   "dependencies": {
     "express": "~4.10.1"
+  },
+  "devDependencies": {
+    "mocha": "~2.0.1"
   }
 }
