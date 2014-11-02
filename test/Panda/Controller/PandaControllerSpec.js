@@ -1,4 +1,4 @@
-var pandaControllerClass = require('./../../../src/Panda/Controller/PandaController.js').constructor,
+var pandaControllerClass = require('./../../../src/Panda/Controller/PandaController.js').construct,
     events = require('events'),
     util = require('util'),
     should = require('should')

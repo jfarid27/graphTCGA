@@ -33,7 +33,7 @@ var PandaController = function(folderStructureEmitter, fileReaderEmitter, buffer
 }
 util.inherits(PandaController, events.EventEmitter)
 
-exports.constructor = PandaController
-exports.get = function(){
-  return new PandaController();
+exports.construct = PandaController
+exports.get = function(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges){
+  return new PandaController(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges);
 }

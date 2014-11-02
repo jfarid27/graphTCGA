@@ -1,4 +1,4 @@
-var folderStructParseEmitter = require('./../../../src/Panda/Modules/folderStructParseEmitter').constructor
+var folderStructParseEmitter = require('./../../../src/Panda/Modules/folderStructParseEmitter').construct
 
 describe('folderStructParseEmitter', function(){
 

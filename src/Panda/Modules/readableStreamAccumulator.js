@@ -21,7 +21,7 @@ var readableStreamAccumulator = function(readableStream){
 }
 util.inherits(readableStreamAccumulator, events.EventEmitter)
 
-module.exports.constructor = readableStreamAccumulator
+module.exports.construct = readableStreamAccumulator
 module.exports.get = function(readableStream){
   return new readableStreamAccumulator(readableStream)
 }

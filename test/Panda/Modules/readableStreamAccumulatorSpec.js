@@ -1,7 +1,7 @@
 var events = require('events'),
   util = require('util'),
   should = require('should'),
-  readableStreamAccumulator = require('./../../../src/Panda/Modules/readableStreamAccumulator.js').constructor
+  readableStreamAccumulator = require('./../../../src/Panda/Modules/readableStreamAccumulator.js').construct
 
 describe('readableStreamAccumulator', function(){
 

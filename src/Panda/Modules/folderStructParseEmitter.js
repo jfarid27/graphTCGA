@@ -52,7 +52,7 @@ var folderStructParseEmitter = function(folderStruct){
 };
 util.inherits(folderStructParseEmitter, events.EventEmitter)
 
-exports.constructor = folderStructParseEmitter 
+exports.construct = folderStructParseEmitter
 
 exports.get = function(folderStruct){
   return new folderStructParseEmitter(folderStruct);
