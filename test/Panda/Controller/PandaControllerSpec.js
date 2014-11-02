@@ -29,16 +29,7 @@ describe('PandaController', function(){
 
             self.on('getListFiles', function(params, success, error){
 
-                if (params.folder){
-                    success(['zed', 'car'])
-                    return
-                }
-
-                return [
-                    {name:"foo", files:["zed", "car"]},
-                    {name:"bar", files:["gat", "ter"]}
-                ]
-
+                success("foo")
 
             })
 
@@ -213,6 +204,38 @@ describe('PandaController', function(){
 
     })
 
-    //describe('on listFilesEvent')
+    describe('on getListFiles event', function(){
+
+        var expected
+
+        beforeEach(function(){
+            expected = ['foo', 'bar']
+        })
+
+
+        it("should call folderStructureEmitter's getListFiles event", function(done){
+
+            var success = function(){ done() }
+
+            mockFolderStructureEmitter.on('getListFiles', success)
+
+            pandaController.emit('getListFiles', {}, function(){ return }, function(){ return })
+        })
+
+        it('should pass given success to fileStructureEmitter', function(done){
+
+            var params,
+                error = function(){ throw new Error('panda listFiles errored out')},
+                success = function(response){
+
+                    response.should.eql("foo")
+                    done()
+                }
+
+            pandaController.emit('getListFiles', params, success, error)
+
+        })
+
+    })
 
 })
