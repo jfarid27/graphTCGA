@@ -6,7 +6,7 @@ var folderStructParseEmitter = function(folderStruct){
   var self = this;
   events.EventEmitter.call(self)
 
-  self.on('subfolders', function(callback, err){
+  self.on('getFolders', function(params, callback, err){
 
     var list = folderStruct.folders
       .map(function(folder){ return folder.name }) 
@@ -15,7 +15,7 @@ var folderStructParseEmitter = function(folderStruct){
 
   })
 
-  self.on('listFiles', function(params, callback, err){
+  self.on('getListFiles', function(params, callback, err){
 
     var response
 
@@ -45,7 +45,7 @@ var folderStructParseEmitter = function(folderStruct){
     if (response){
       callback(response)
     } else {
-      err("Case not matched for listFiles event")
+      err("Case not matched for getListFiles event")
     }
   })
 

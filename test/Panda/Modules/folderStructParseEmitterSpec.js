@@ -28,7 +28,7 @@ describe('folderStructParseEmitter', function(){
 
   })
 
-  describe('on subfolders event', function(){
+  describe('on getFolders event', function(){
 
     it('should populate callback with names of subfolders', function(done){
 
@@ -45,13 +45,13 @@ describe('folderStructParseEmitter', function(){
         done() 
       } 
 
-      emitter.emit('subfolders', callback, err)
+      emitter.emit('getFolders', {}, callback, err)
 
     })
 
   })
 
-  describe('on listFiles event', function(){
+  describe('on getListFiles event', function(){
 
     describe('with folder parameter given', function(){
       it('should return files within folder', function(done){
@@ -66,7 +66,7 @@ describe('folderStructParseEmitter', function(){
           done()
         } 
 
-        emitter.emit('listFiles', {folder: "RNASeq"}, callback, err) 
+        emitter.emit('getListFiles', {folder: "RNASeq"}, callback, err)
 
       })
 
@@ -81,7 +81,7 @@ describe('folderStructParseEmitter', function(){
             done()
           } 
 
-          emitter.emit('listFiles', {folder:"foo"}, callback, err)
+          emitter.emit('getListFiles', {folder:"foo"}, callback, err)
 
         })
       })
@@ -99,7 +99,7 @@ describe('folderStructParseEmitter', function(){
           throw new Error("Error func called in test")
         }
 
-        emitter.emit('listFiles', {}, callback, err)
+        emitter.emit('getListFiles', {}, callback, err)
         
  
       })

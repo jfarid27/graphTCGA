@@ -1,85 +1,39 @@
 var events = require('events'),
-  util = require('util'),
-  folderStructureEmitter = require('./folderStructParseEmitter'),
-  readableStreamEmitter = require('./readableStreamBufferEmitter.js'),
-  fs = require('fs'),
-  arraysToGraphEdges = require('./arrayToGraphEdge.js').arraysToGraphEdgesSync
+  util = require('util')
 
-//Relative to server start for fs module
-var pathToFiles = './src/Panda/data';
-
-
-var PandaController = function(){
-
-  var self = this;
-  events.EventEmitter.call(self);
-
-  self.on('fileRequestJsonEvent', function(params, callback, err){
-
-    var filePath = pathToFiles + '/' + params.folder + '/' + params.file
-    var fileConnection = fs.createReadStream(filePath)
-     
-    var connection = readableStreamEmitter
-      .connectToStream(fileConnection, arraysToGraphEdgesWrapper(callback))
+var PandaController = function(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges){
     
-    connection.on('error', function(error){ 
+    var self = this;
+    events.EventEmitter.call(self);
 
-      var message = "ReadableStreamEmitter Error"
-      err(message) 
+    self.on('getFile', function(params, success, error){
 
+        var successCurry = function(buffer){
+            self.emit('parseBuffer', {buffer:buffer}, success, error)
+            return
+        }
+
+        fileReaderEmitter.emit('getFile', params, successCurry, error)
     })
 
-  })
+    self.on('getFolders', function(params, success, error){
+        folderStructureEmitter.emit('getFolders', params, success, error)
+    })
 
-  self.on('availableFoldersEvent', function(params, callback, err){
-  
-    var connection = folderStructureEmitter.connectToEmitter()
+    self.on('getListFiles', function(params, success, error){
+        folderStructureEmitter.emit('getListFiles', params, success, error)
+    })
 
-    connection.emit('subfolders', params, subfolderWrapper(callback));
-
-    connection.on('error', function() { err() }); 
-
-  })
-
-  self.on('listAvailableFilesEvent', function(params, callback, err){
-    var connection = folderStructureEmitter.connectToEmitter()
-
-    connection.emit('listFiles', params, subfolderWrapper(callback));
-
-    connection.on('error', function(message) { err(message) }); 
-
-  })
+    self.on('parseBuffer', function(params, success, error){
+        var edges = bufferToGraphEdges(params.buffer);
+        self.emit('converted buffer to edges', {edges:edges})
+        success({edges:edges})
+    })
 
 }
 util.inherits(PandaController, events.EventEmitter)
 
-exports.PandaController = PandaController
-exports.connectToEmitter = function(){
+exports.constructor = PandaController
+exports.get = function(){
   return new PandaController();
-}
-
-//Helper Functions
-
-function subfolderWrapper(callback){
-
-  return function(list){
-    var response = {
-      data: list
-    }
-
-    callback(response)
-  }
-
-}
-
-function arraysToGraphEdgesWrapper(callback) {
- 
-
-    return function(list) {
-      
-      var response = { edges:arraysToGraphEdges(list) } 
-
-      callback(response)
-    }
-
 }

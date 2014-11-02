@@ -1,8 +1,10 @@
-var arrayToGraphEdge = require('./../../../src/Panda/Modules/arrayToGraphEdge.js')
-  .arrayToGraphEdgeSync
+var construct = require('./../../../src/Panda/Modules/arrayToGraphEdge.js')
 
-var arraysToGraphEdges = require('./../../../src/Panda/Modules/arrayToGraphEdge.js')
-  .arraysToGraphEdgesSync
+var arrayToGraphEdge = construct.arrayToGraphEdgeSync
+
+var arraysToGraphEdges = construct.arraysToGraphEdgesSync
+
+var bufferToGraphEdges = construct.bufferToGraphEdges
 
 describe('arrayToGraphEdges', function(){
 
@@ -16,6 +18,8 @@ describe('arrayToGraphEdges', function(){
       ['foo','bar', 0, 1],
       ['bar','foo', 0, 1],
     ]
+
+    testBuffer = "foo\tbar\t0\t1\nzed\tbar\t0\t1"
 
   })
 
@@ -48,5 +52,23 @@ describe('arrayToGraphEdges', function(){
     })
 
   })
+
+    describe('bufferToGraphEdge', function(){
+        describe('when given a buffer', function(){
+            it('should convert buffer to array of graph edges', function(){
+                var expected = [
+                    {source:"foo", target:"bar", weight: 0, strength:1},
+                    {source:"zed", target:"bar", weight: 0, strength:1}
+                ]
+
+                var converted = bufferToGraphEdges(testBuffer)
+
+                converted.should.containEql(expected[0])
+                converted.should.containEql(expected[1])
+
+            })
+
+        })
+    })
 
 })
