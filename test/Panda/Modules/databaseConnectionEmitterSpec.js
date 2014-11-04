@@ -1,7 +1,7 @@
 var databaseConnection = require('./../../../src/Panda/Modules/databaseConnectionEmitter.js').construct,
     events = require('events'),
     util = require('util'),
-    stream = require('stream')
+    stream = require('stream'),
     should = require('should');
 
 describe('databaseConnectionEmitter', function(){
