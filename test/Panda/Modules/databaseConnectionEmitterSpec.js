@@ -77,6 +77,11 @@ describe('databaseConnectionEmitter', function(){
             databaseConnectionEmitter.emit('getFile', params, success, error)
 
         })
+
+        describe('on stream close with no cache from accumulator', function(){
+            it('should error out')
+        })
+
     })
 })
 
