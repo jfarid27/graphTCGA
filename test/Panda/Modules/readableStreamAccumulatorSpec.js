@@ -1,88 +1,56 @@
 var events = require('events'),
   util = require('util'),
   should = require('should'),
+  stream = require('stream'),
   readableStreamAccumulator = require('./../../../src/Panda/Modules/readableStreamAccumulator.js').construct
 
 describe('readableStreamAccumulator', function(){
 
-  function mockReadableStream (){
+  var mockReadableStream = function(){
     var self = this
-    events.EventEmitter.call(self)
-      
-    var testString1 = "Hello\n"
-    var testString2 = "World\n"
-    var bufferedString1 = new Buffer(testString1)
-    var bufferedString2 = new Buffer(testString2)
-
-    self.on('floodData', function(){
-      self.emit('data', bufferedString1)
-      self.emit('data', bufferedString2)
-      self.emit('close')
-    })
-
-    self.on('raiseSingleDataEvent', function(){
-      self.emit('data', bufferedString1)
-    })
-
-
+    stream.Readable.call(self)
+    self._count = 0
   }
-  util.inherits(mockReadableStream, events.EventEmitter)
+  util.inherits(mockReadableStream, stream.Readable)
+  mockReadableStream.prototype._read = function(){
+      var self = this
+      self._count++
+      
+      if (self._count == 1){
+          self.push(new Buffer("Hello\n"))
+      } else if (self._count == 2){
+          self.push(new Buffer("World\n"))
+      } else {
+          self.push(null)
+          self.emit('end')
+      }
+  }
 
-  var readableStream, accumulator
 
-
-  beforeEach(function(){
-    readableStream = new mockReadableStream();
-    accumulator = new readableStreamAccumulator(readableStream)
-  }) 
 
   describe('cache', function(){
+
+    var readableStream, accumulator
+
+    beforeEach(function(){
+        readableStream = new mockReadableStream();
+        accumulator = new readableStreamAccumulator(readableStream)
+    })
     it('should be defined', function(){
       accumulator.cache.should.be.an.Array
     })
 
   })
 
-  describe('on readableStream data event', function(){
-    it('should push buffer into cache list', function(done){
-      
-      accumulator.on('receivedDataEvent', function(){
-        accumulator.cache.length.should.eql(1)
-        accumulator.cache[0].toString().should.be.equal("Hello\n")
-        done()
-      })
-  
-      readableStream.emit('raiseSingleDataEvent')
-      
-    })
-  })
-
-  describe('on readableStream close event', function(){
-    it('should raise close event', function(done){
-
-      accumulator.on('close', function(){
-        done()
-      })    
-
-      readableStream.emit('close')
-
-
-    })
+  describe('on readableStream end event', function(){
     it('should raise data event and return cached buffer as single buffer', function(done){
 
-      var bufferToString
+      var accumulator = new readableStreamAccumulator(new mockReadableStream())
 
-      accumulator.on('data', function(chunk){
-        bufferToString = chunk.toString()
-      })
-
-      accumulator.on('close', function(){
-        
-        bufferToString.should.equal("Hello\nWorld\n")
+      accumulator.on('data', function(buffer){
+        buffer.toString().should.equal("Hello\nWorld\n")
         done()
       })
-
-      readableStream.emit('floodData')
 
     })
   })

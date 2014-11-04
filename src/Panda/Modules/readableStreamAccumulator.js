@@ -1,7 +1,7 @@
 var events = require('events'),
   util = require('util')
 
-var readableStreamAccumulator = function(readableStream){
+function readableStreamAccumulator(readableStream){
 
   var self = this
   events.EventEmitter.call(self)
@@ -13,9 +13,14 @@ var readableStreamAccumulator = function(readableStream){
     self.emit('receivedDataEvent')
   })
 
-  readableStream.on('close', function(){
+  readableStream.on('end', function(){
     self.emit('data', Buffer.concat(self.cache))
     self.emit('close')
+  })
+
+  readableStream.on('error', function(){
+      self.emit('error')
+      self.emit('close')
   })
 
 }
