@@ -15,5 +15,13 @@ function arraysToGraphEdges(arrs){
 
 }
 
+function bufferToGraphEdges(buffer){
+    var data = buffer.toString()
+    var lines = data.split('\n')
+    var arrs = lines.map(function(line){ return line.split('\t')})
+    return arraysToGraphEdges(arrs)
+}
+
 exports.arrayToGraphEdgeSync = arrayToGraphEdge
 exports.arraysToGraphEdgesSync = arraysToGraphEdges 
+exports.bufferToGraphEdges = bufferToGraphEdges

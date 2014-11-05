@@ -4,8 +4,10 @@
   "description": "Server for Panda built TCGA network",
   "main": "index.js",
   "scripts": {
-    "test": "test",
-    "start": "node index.js"
+    "test": "./node_modules/mocha/bin/mocha --recursive",
+    "start": "node index.js",
+    "dev-server": "./node_modules/mocha/bin/mocha --recursive -R spec -w",
+    "test-verbose": "./node_modules/mocha/bin/mocha --recursive -R spec"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,9 @@
   },
   "dependencies": {
     "express": "~4.10.1"
+  },
+  "devDependencies": {
+    "mocha": "~2.0.1",
+    "should": "~4.1.0"
   }
 }
