@@ -16,17 +16,13 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
         //Test Configuration
-        {
-            'pattern': 'web/test/test.config.js',
-            'included': true
-        },
+        {'pattern': 'web/test/test.config.js', 'included': true},
 
         //Libraries
-        //{'pattern': 'bower_components/requirejs/require.js', 'included':true},
         {'pattern': 'bower_components/**/*.js',
             'included':false},
-        {'pattern': 'node_modules', 'included': false},
-
+        {'pattern': 'node_modules/angular-mocks/**/*.js',
+            'included':false},
         //Source Files
         {'pattern': 'web/src/javascript/**/*.js', 'included':false},
 

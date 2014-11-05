@@ -21,7 +21,7 @@ require.config({
         'bower': 'bower_components/',
         'web_js': 'web/src/javascript/',
         'angular': 'bower_components/angular/angular',
-        'angular_mocks': 'node_modules/angular-mocks/angular-mocks',
+        'angularMocks': 'node_modules/angular-mocks/angular-mocks',
         'jquery': '',
         'd3': 'bower_components/d3/d3'
     },
@@ -30,9 +30,9 @@ require.config({
         'angular': {
             'exports': 'angular'
         },
-        'angular_mocks': {
+        'angularMocks': {
             'deps': ['angular'],
-            'exports': ''
+            'exports': 'inject'
         },
         'jquery':{
             'exports': 'jquery'
