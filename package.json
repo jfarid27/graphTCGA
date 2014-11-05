@@ -4,24 +4,38 @@
   "description": "Server for Panda built TCGA network",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive",
+    "test": "./node_modules/mocha/bin/mocha --recursive && ./node_modules/karma/bin/karma start --single-run",
     "start": "node index.js",
     "dev-server": "./node_modules/mocha/bin/mocha --recursive -R spec -w",
-    "test-verbose": "./node_modules/mocha/bin/mocha --recursive -R spec"
+    "test-verbose-server": "./node_modules/mocha/bin/mocha --recursive -R spec",
+    "dev-web": "./node_modules/karma/bin/karma start",
+    "post-install": "./node_modules/bower install"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/jfarid27/graphTCGA.git"
   },
   "author": "J. Farid",
-  "license": "GPL2",
+  "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/jfarid27/graphTCGA/issues"
+    "url": "https://github.com/jfarid27/graphTCGA/issues",
+    "email": "jfarid27@gmail.com"
   },
   "dependencies": {
-    "express": "~4.10.1"
+    "express": "~4.10.1",
+    "bower": "~1.3.5",
+    "requirejs": "~2.1.14"
   },
   "devDependencies": {
+    "angular-mocks": "~1.2.18",
+    "jasmine": "^2.0.1",
+    "karma": "~0.12.24",
+    "karma-chrome-launcher": "~0.1",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-htmlfile-reporter": "~0.1.2",
+    "karma-jasmine": "^0.2.3",
+    "karma-requirejs": "~0.2.2",
+    "karma-safari-launcher": "~0.1.1",
     "mocha": "~2.0.1",
     "should": "~4.1.0"
   }
