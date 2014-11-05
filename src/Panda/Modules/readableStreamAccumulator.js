@@ -18,8 +18,8 @@ function readableStreamAccumulator(readableStream){
     self.emit('close')
   })
 
-  readableStream.on('error', function(){
-      self.emit('error')
+  readableStream.on('error', function(err){
+      self.emit('error', err)
       self.emit('close')
   })
 

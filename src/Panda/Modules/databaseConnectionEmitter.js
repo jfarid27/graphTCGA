@@ -34,9 +34,9 @@ var databaseConnectionEmitter = function(pathString, readableStreamAccumulator, 
             }
         })
 
-        stream.on('error', function(){
+        stream.on('error', function(err){
             error('readableStreamAccumulator error!')
-            self.emit('error')
+            self.emit('error', err)
         })
 
     })

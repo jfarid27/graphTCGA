@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/bower_components'))
 
 function start() {
 
-    panda.addRoutesTo(app)
+    panda.addRoutesTo(app, './src/Panda/Data')
 
     app.listen(3000, function(){
         console.log('Waiting for requests...')

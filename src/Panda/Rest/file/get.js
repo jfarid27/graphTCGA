@@ -14,7 +14,7 @@ function getFile(controller){
       }
 
       var resErrWrapper = function(msg) {
-        response.status(500).send({error:msg})
+        response.status(500).send({error:"Failed on file get"})
       }
 
       controller.emit('getFile', params, resWrapper, resErrWrapper)

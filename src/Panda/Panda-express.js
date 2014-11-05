@@ -1,23 +1,25 @@
 var fs = require('fs'),
     pandaRest = require('./Rest/PandaRest.js').rest,
-    fileStructure = require('./Data/fileStructure.js'),
-    pathToFiles = './Data';
+    fileStructure = require('./Data/fileStructure.js');
 
-var folderStructParseEmitter = require('./Modules/folderStructParseEmitter.js')
-    .get(fileStructure)
 
-var readableStreamAccumulator = require('./Modules/readableStreamAccumulator.js')
-    .construct
+var pandaExpress = function(app, pathToFiles) {
 
-var fileReaderEmitter = require('./Modules/databaseConnectionEmitter.js')
-    .get(pathToFiles, fs)
+    var folderStructParseEmitter = require('./Modules/folderStructParseEmitter.js')
+        .get(fileStructure)
 
-var bufferToGraphEdges = require('./Modules/arrayToGraphEdge.js').bufferToGraphEdges
+    var readableStreamAccumulator = require('./Modules/readableStreamAccumulator.js')
+        .construct
 
-var pandaController = require('./Controller/PandaController.js')
-    .get(folderStructParseEmitter, fileReaderEmitter, bufferToGraphEdges);
+    var fileReaderEmitter = require('./Modules/databaseConnectionEmitter.js')
+        .get(pathToFiles, readableStreamAccumulator, fs)
 
-var pandaExpress = function(app) {
+    var bufferToGraphEdges = require('./Modules/arrayToGraphEdge.js').bufferToGraphEdges
+
+    var pandaController = require('./Controller/PandaController.js')
+        .get(folderStructParseEmitter, fileReaderEmitter, bufferToGraphEdges);
+
+
     pandaRest(app, pandaController)
 }
 
