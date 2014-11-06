@@ -2,3 +2,5 @@ node_modules/
 /src/Panda/Data/RNASeq/
 /src/Panda/Data/MicroArray/
 **/npm-debug.log
+/bower_components/
+/log/

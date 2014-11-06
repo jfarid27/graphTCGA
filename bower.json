@@ -1,0 +1,16 @@
+{
+  "name": "graphTCGA",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jfarid27/graphTCGA",
+  "authors": [
+    "jfarid27 <jfarid27@gmail.com>"
+  ],
+  "license": "GPL-2.0",
+  "dependencies": {
+    "angular": "~1.2.18",
+    "d3": "~3.4.8",
+    "foundation": "~5.2.3",
+    "requirejs": "~2.1.14",
+    "angular-route": "~1.3.1"
+  }
+}

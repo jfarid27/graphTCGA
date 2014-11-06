@@ -2,11 +2,11 @@ var express = require("express"),
   app = express(),
   panda = require('./src/Panda/Panda-express.js');
 
-/*
-app.use(express.static(__dirname + '/web/lib'))
-app.use(express.static(__dirname + '/web/js/lib'))
+
+app.use(express.static(__dirname + '/web/src/javascript'))
+app.use(express.static(__dirname + '/web/src/views'))
 app.use(express.static(__dirname + '/bower_components'))
-*/
+
 
 function start() {
 
