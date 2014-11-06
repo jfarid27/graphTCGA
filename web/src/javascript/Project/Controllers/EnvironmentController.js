@@ -1,6 +1,6 @@
 (function(){
 
-    define([], function(EnvironmentControllerFactory){
+    define([], function(){
 
         return function($scope, Environment, Api){
 
