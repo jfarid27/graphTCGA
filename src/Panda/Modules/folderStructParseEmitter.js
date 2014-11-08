@@ -11,7 +11,7 @@ var folderStructParseEmitter = function(folderStruct){
     var list = folderStruct.folders
       .map(function(folder){ return folder.name }) 
 
-    callback(list)
+    callback({folders:list})
 
   })
 
@@ -43,7 +43,7 @@ var folderStructParseEmitter = function(folderStruct){
     }
 
     if (response){
-      callback(response)
+      callback({files:response})
     } else {
       err("Case not matched for getListFiles event")
     }
