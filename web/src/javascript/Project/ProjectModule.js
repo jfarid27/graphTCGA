@@ -2,32 +2,25 @@
 
     var deps = [
         'angular',
-        './Controllers/EnvironmentController',
-        './Factories/EnvironmentFactory',
-        './Factories/ApiFactory'
+        './ProjectControllers',
+        './ProjectDirectives',
+        './ProjectFactories',
     ];
 
-    define(deps, function(angular, EnvironmentController, EnvironmentFactory, ApiFactory){
+    define(deps, function(angular, addControllers, addDirectives, addFactories){
 
-        angular.module('Project', [])
-        .controller('EnvironmentController', ['$scope', 'Project.Environment', 'Project.Api', EnvironmentController])
-        .factory('Project.Environment', [EnvironmentFactory])
-        .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource', ApiFactory])
-        .factory('Project.FileResource', ['$resource', function($resource){
-            return $resource('/file',{},{
-                get:{
-                    method:"GET"
-                }
-            })
-        }])
-        .factory('Project.FolderResource', ['$resource', function($resource){
-            return $resource('/folder',{},{
-                get:{
-                    method:"GET"
-                }
-            })
-        }])
+        var project = angular.module('Project', [])
+
+        project.urlPath = 'javascript/Project'
+
+        addControllers(project)
+        addFactories(project)
+        addDirectives(project)
+
+        return project
+
     })
 
-    return angular
+
+
 })()

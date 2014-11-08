@@ -1,14 +1,14 @@
 (function(){
 
-    var deps = ['angular']
+    var deps = ['angular', 'angular-route', './Project/ProjectModule']
 
-    var appModuleDeps = []
+    var appModuleDeps = ['Project', 'ngRoute']
 
     define(deps, function (angular) {
 
-        angular.module('graphTCGA', appModuleDeps)
+        var app = angular.module('graphTCGA', appModuleDeps)
 
-        return angular
+        return app
     })
 
 })()
