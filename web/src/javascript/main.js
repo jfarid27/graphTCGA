@@ -5,12 +5,13 @@ require.config({
     'baseUrl': '',
 
     'paths': {
-        'angular': ['angular/angular'],
-        'angular-route': ['angular-route/angular-route'],
-        'jquery': ['jquery/jquery'],
-        'd3': ['d3/d3']
+        'angular': ['/angular/angular'],
+        'angular-route': ['/angular-route/angular-route'],
+        'angular-resource': ['/angular-resource/angular-resource'],
+        'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min',
+                   'jquery'],
+        'd3': ['/d3/d3']
     },
-
     'shim': {
         'angular': {
             'exports': 'angular'
@@ -19,8 +20,9 @@ require.config({
             'exports': 'ngRoute',
             'deps': ['angular']
         },
-        'jquery':{
-            'exports': 'jquery'
+        'angular-resource': {
+            'exports': 'ngResource',
+            'deps': ['angular']
         },
         'd3':{
             'exports': 'd3'
@@ -30,7 +32,7 @@ require.config({
     'waitSeconds': 1
 })
 
-require(['angular', 'angular-route', './app'], function(angular){
+require(['angular','jquery', './javascript/app'], function(angular){
 
 
     angular.element(document).ready(function() {

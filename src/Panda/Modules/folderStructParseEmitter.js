@@ -11,7 +11,7 @@ var folderStructParseEmitter = function(folderStruct){
     var list = folderStruct.folders
       .map(function(folder){ return folder.name }) 
 
-    callback(list)
+    callback({folders:list})
 
   })
 
@@ -20,7 +20,8 @@ var folderStructParseEmitter = function(folderStruct){
     var response
 
     if(!params.folder){
-      response = folderStruct.folders
+      response = {}
+      response.folders = folderStruct.folders
         .map(function(folder){ return folder })
     }
 
@@ -33,7 +34,8 @@ var folderStructParseEmitter = function(folderStruct){
       })[0]
     
       if (folder && folder.files) {
-        response = folder.files
+        response = {}
+        response.files = folder.files
       } else {
         err("Matched folder error")
         return

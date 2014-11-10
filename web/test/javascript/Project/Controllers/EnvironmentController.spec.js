@@ -17,17 +17,48 @@
                         self.$registeredEvents[event] = success
                     }
                     self.$emit = function(event, params){
-                        self.$registeredEvents[event](params)
+                        self.$registeredEvents[event]({}, params)
                     }
                     self.$registeredEvents = {}
+                    self.$registeredWatchers = {}
+                    self.$watch = function(property, callback){
+                        self.$registeredWatchers[property] = callback
+                    }
                 }
 
                 $scope = new scopeConstr()
 
                 Api = {
-                    getFile: function(params){return 'zed'},
+                    getFile: function(params){
+                        return 'zed'
+                    },
+                    downloadGraph: function(params){
+                        return {
+                            $promise: {
+                                then: function(success){
+                                    success({edges: ['foo', 'bar']})
+                                }
+                            }
+                        }
+                    },
                     downloadFile: function(params){ return },
-                    getFolder: function(params){ return (params && params.folder) ? ['foo'] : ['bar']}
+                    getFolder: function(params){
+                        return (params && params.folder) ? {
+                            $promise: {
+                                then: function(success){
+                                    success({files: ['foo']})
+                                }
+                            }
+                        }
+
+                        : {
+                            $promise: {
+                                then: function(success){
+                                    success({folders: ['bar']})
+                                }
+                            }
+                        }
+                    }
                 }
                 spyOn(Api, 'getFolder').and.callThrough()
 
@@ -55,6 +86,20 @@
                     })
                 })
 
+                describe('on selectedFolder watch call', function(){
+
+                    var selectedFolder = 'foo'
+
+                    it('should emit onFolderSelect event if selected folder is not null', function(){
+
+                        spyOn($scope, '$emit')
+
+                        $scope.$registeredWatchers['environment.selectedFolder']('foo')
+                        expect($scope.$emit).toHaveBeenCalledWith('onFolderSelect', {'folder': 'foo'})
+                    })
+
+                })
+
                 describe('on onFolderSelect event', function(){
 
                     var params, results
@@ -74,9 +119,6 @@
                         expect($scope.$registeredEvents['onFolderSelect']).toHaveBeenCalled()
                         expect($scope.environment.availableFiles).toContain('foo')
                     })
-                    it('should update selected folder', function(){
-                        expect($scope.environment.selectedFolder).toBe('foo')
-                    })
                 })
 
                 describe('on onFileSelect event', function(){
@@ -84,42 +126,51 @@
                     var params, results
 
                     beforeEach(function(){
-
                         params = {file: 'foo'}
-
                         spyOn($scope.$registeredEvents, 'onFileSelect').and.callThrough()
-                        spyOn(Api, 'getFile').and.callThrough()
                         $scope.$emit('onFileSelect', params)
                     })
 
-                    it('should call getFile on api', function(){
-                        expect(Api.getFile).toHaveBeenCalledWith({file:'foo'})
-                    })
-                    it('should populate graph on scope', function(){
-                        expect($scope.$registeredEvents.onFileSelect).toHaveBeenCalled()
-                        expect($scope.environment.graph).toBe('zed')
-                    })
                     it('should update selected file', function(){
                         expect($scope.environment.selectedFile).toBe('foo')
                     })
                 })
 
-                describe('on onDownloadFile event', function(){
+                describe('on onDownloadGraph event', function(){
 
                     var params, results
 
                     beforeEach(function(){
-                        params = {file:'foo'}
+                        params = {file:'foo', folder:'zed'}
 
-                        spyOn($scope.$registeredEvents, 'onDownloadFile').and.callThrough()
-                        spyOn(Api, 'downloadFile').and.callThrough()
-                        $scope.$emit('onDownloadFile', params)
+                        spyOn($scope.$registeredEvents, 'onDownloadGraph').and.callThrough()
+                        spyOn(Api, 'downloadGraph').and.callThrough()
+                        $scope.$emit('onDownloadGraph', params)
 
                     })
 
-                    it('should call downloadFile on Api', function(){
-                        expect(Api.downloadFile).toHaveBeenCalledWith({file:'foo'})
+                    it('should call downloadGraph on Api', function(){
+                        expect(Api.downloadGraph).toHaveBeenCalledWith({file:'foo', folder:'zed'})
+
                     })
+
+                    it('should populate scope with downloadGraph response', function(){
+                        expect($scope.environment.graph.edges).toContain('foo')
+                        expect($scope.environment.graph.edges).toContain('bar')
+                    })
+                })
+
+                describe('on onDownloadFile event', function(){
+
+                    it('should call Api.downloadFile', function(){
+
+                        spyOn(Api, 'downloadFile')
+
+                        $scope.$emit('onDownloadFile', {file:'foo', folder:'bar'})
+
+                        expect(Api.downloadFile).toHaveBeenCalledWith({file:'foo', folder:'bar'})
+                    })
+
                 })
 
             })

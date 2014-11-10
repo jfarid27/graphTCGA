@@ -1,0 +1,18 @@
+
+<div class='panel'>
+
+    <h6>Sequence Type:</h6>
+    <select ng-model="environment.selectedFolder" ng-options="folder for folder in environment.availableFolders"></select>
+    <h6>Cancer Data Type:</h6>
+    <select ng-model="environment.selectedFile" ng-options="file for file in environment.availableFiles"></select>
+    <h6>File Format:</h6>
+    <select ng-model="environment.selectedType" ng-options="type for type in environment.availableTypes"></select>
+    <h6>Interaction Threshold:</h6>
+    <input type="text" ng-model="environment.interactionThreshold" required>
+    <h6>Z-Score Threshold:</h6>
+    <input type="text" ng-model="environment.zScoreThreshold" required>
+
+    <button ng-click="downloadFile()" class="button expand">Start Download</button>
+
+
+</div>
