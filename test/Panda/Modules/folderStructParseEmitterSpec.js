@@ -34,10 +34,10 @@ describe('folderStructParseEmitter', function(){
 
 
       var expected = ["MicroArray", "RNASeq"]
-      var callback = function(list){
+      var callback = function(response){
 
-        list.should.containEql(expected[0])
-        list.should.containEql(expected[1])
+        response.folders.should.containEql(expected[0])
+        response.folders.should.containEql(expected[1])
         done()
       }
       var err = function(){ 
@@ -57,8 +57,8 @@ describe('folderStructParseEmitter', function(){
       it('should return files within folder', function(done){
 
         var expected = ["MVA_FinalNetwork.pairs"]
-        var callback = function(list){
-          list.should.containEql(expected[0])
+        var callback = function(response){
+          response.files.should.containEql(expected[0])
           done()
         }
         var err = function(){ 
@@ -91,8 +91,9 @@ describe('folderStructParseEmitter', function(){
       it('should return all files in every folder', function(done){
         
         var callback = function(resp){
-          resp.should.containEql(testFolderStruct.folders[0])
-          resp.should.containEql(testFolderStruct.folders[1])
+            console.log(resp)
+          resp.folders.should.containEql(testFolderStruct.folders[0])
+          resp.folders.should.containEql(testFolderStruct.folders[1])
           done()
         },
         err = function(){

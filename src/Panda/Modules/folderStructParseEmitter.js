@@ -20,7 +20,8 @@ var folderStructParseEmitter = function(folderStruct){
     var response
 
     if(!params.folder){
-      response = folderStruct.folders
+      response = {}
+      response.folders = folderStruct.folders
         .map(function(folder){ return folder })
     }
 
@@ -33,7 +34,8 @@ var folderStructParseEmitter = function(folderStruct){
       })[0]
     
       if (folder && folder.files) {
-        response = folder.files
+        response = {}
+        response.files = folder.files
       } else {
         err("Matched folder error")
         return
@@ -43,7 +45,7 @@ var folderStructParseEmitter = function(folderStruct){
     }
 
     if (response){
-      callback({files:response})
+      callback(response)
     } else {
       err("Case not matched for getListFiles event")
     }
