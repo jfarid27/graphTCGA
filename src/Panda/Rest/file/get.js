@@ -2,22 +2,48 @@ function getFile(controller){
     return function(request, response){
 
       if (!request.params) {
-        response.status(501).send({error: "No request params set!"})
+        response.status(501).send({error: "Error: No request params set!"})
         return
       }
 
       //unwrap request
-      var params = {folder: request.param('folder'), file: request.param('file')}
+      var params = {
+          folder: request.param('folder'),
+          file: request.param('file'),
+          zScoreThreshold: request.param('zScoreThreshold'),
+          interactionThreshold: request.param('interactionThreshold'),
+          format: request.param('format')
+      }
 
-      var resWrapper = function(data) {
-        response.json(data)
+      if (!params.folder || !params.file || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
+          var message= "Error: Missing request params!"
+          response.status(501).json({error: message})
+          return
+      }
+
+      var resWrapperJson = function(data) {
+        response.type('json')
+        response.send(data)
+      }
+
+
+      var resWrapperTsv = function(data){
+        response.type('tsv')
+        response.send(data)
       }
 
       var resErrWrapper = function(msg) {
-        response.status(500).send({error:"Failed on file get"})
+        response.status(501).json({error:"Failed on file get"})
       }
 
-      controller.emit('getFile', params, resWrapper, resErrWrapper)
+      if(params.format == 'json' || params.format == 'cytoscape'){
+          controller.emit('getFile', params, resWrapperJson, resErrWrapper)
+      } else if (params.format = 'tsv' || params.format == 'gephi') {
+          controller.emit('getFile', params, resWrapperTsv, resErrWrapper)
+
+      }
+
+
 
     }
 }

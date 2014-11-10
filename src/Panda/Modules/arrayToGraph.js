@@ -5,8 +5,9 @@ function bufferToLines(buffer, params){
     var lines = data.split('\n')
     var arrs = lines.map(function(line){ return line.split('\t')})
     var filtered = arrs.filter(function(arr){
-        var interaction = (parseFloat(arr[2]) >= params.interactionThreshold)
-        var zScore = (parseFloat(arr[3]) >= params.zScoreThreshold)
+        var interaction = (parseFloat(arr[2]) >= parseFloat(params.interactionThreshold))
+        var zScore = (parseFloat(arr[3]) >= parseFloat(params.zScoreThreshold)
+                      || Math.abs(parseFloat(arr[3])) >= parseFloat(params.zScoreThreshold))
 
         return (interaction && zScore) ? true : false
     })
@@ -23,13 +24,23 @@ function arrayToTsv(arr){
         response.push(line)
     }
 
-    return response
+    return response.join("")
 }
 
 function arrayToGephi(arr){
+
     var head = "Source\tTarget\tInteraction\tzScore\n"
 
-    var body = arrayToTsv(arr).join("")
+    var lines = []
+
+    for (edge in arr){
+
+        var line = arr[edge][0] + '\t' + arr[edge][1] + '\t' + arr[edge][2] + '\t' + arr[edge][3] + '\n'
+
+        lines.push(line)
+    }
+
+    var body = lines.join("")
 
     return head + body
 
