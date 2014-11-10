@@ -37,6 +37,26 @@
 
             })
 
+            describe('on downloadGraph call', function(){
+
+                var response
+
+                beforeEach(function(){
+                    spyOn(fileResource, 'get').and.callThrough()
+
+                    response = api.downloadGraph({"file":"foo", "folder": "bar"})
+                })
+
+                it('should have called fileResource get method', function(){
+                    expect(fileResource.get).toHaveBeenCalledWith({"file":"foo", "folder": "bar"})
+                })
+
+                it('should return fileResources return object', function(){
+                    expect(response).toBe('bar')
+                })
+
+            })
+
             describe('on getFolder call', function(){
 
                 beforeEach(function(){

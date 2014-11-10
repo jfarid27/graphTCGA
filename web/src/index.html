@@ -3,17 +3,27 @@
     <head>
         <link rel="stylesheet" href="foundation/css/normalize.css">
         <link rel="stylesheet" href="foundation/css/foundation.css">
+        <link rel="stylesheet" type="text/css" href="index.css">
 
     </head>
 
 
-    <body>
+    <body ng-controller="EnvironmentController">
+        <app-header></app-header>
 
-        <environment-interface></environment-interface>
+        <div class="row">
+            <div class="large-4 columns">
+                <environment-interface></environment-interface>
+            </div>
+            <div class="large-8 columns">
+                <about-section></about-section>
+            </div>
+
+        </div>
+
+
 
         <script data-main='/javascript/main.js' src='requirejs/require.js'></script>
     </body>
-
-
 
 </html>

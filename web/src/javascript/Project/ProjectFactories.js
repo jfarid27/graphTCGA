@@ -10,11 +10,15 @@
         return function(module){
 
             module
-            .factory('Project.Environment', [EnvironmentFactory])
+            .factory('Project.Environment', [function(){return new EnvironmentFactory}])
             .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource', ApiFactory])
             .factory('Project.FileResource', ['$resource', function($resource){
                 return $resource('/file',{},{
                     get:{
+                        method:"GET"
+                    },
+                    download:{
+                        url:"/download",
                         method:"GET"
                     }
                 })

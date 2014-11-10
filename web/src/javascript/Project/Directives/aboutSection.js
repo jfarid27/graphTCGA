@@ -4,11 +4,11 @@
 
         return function(module){
 
-            module.directive('environmentInterface', [function(){
+            module.directive('aboutSection', [function(){
 
                 return {
                     restrict: 'E',
-                    templateUrl: module.urlPath + '/Directives/templates/environmentInterface.html',
+                    templateUrl: module.urlPath + '/Directives/templates/aboutSection.html',
                     link: function(scope, element, attributes){
 
                         scope.drawGraph = function(){

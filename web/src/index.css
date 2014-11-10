@@ -1,0 +1,19 @@
+div.panel {
+    margin-top: 20px
+}
+
+div#about {
+    margin-top: 20px;
+    margin-left: 20px
+}
+
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}

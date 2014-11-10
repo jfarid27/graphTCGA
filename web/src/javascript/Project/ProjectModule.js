@@ -5,16 +5,17 @@
         './ProjectControllers',
         './ProjectDirectives',
         './ProjectFactories',
+        'angular-resource'
     ];
 
     define(deps, function(angular, addControllers, addDirectives, addFactories){
 
-        var project = angular.module('Project', [])
+        var project = angular.module('Project', ['ngResource'])
 
         project.urlPath = 'javascript/Project'
 
-        addControllers(project)
         addFactories(project)
+        addControllers(project)
         addDirectives(project)
 
         return project

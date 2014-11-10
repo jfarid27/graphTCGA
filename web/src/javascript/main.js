@@ -7,6 +7,7 @@ require.config({
     'paths': {
         'angular': ['/angular/angular'],
         'angular-route': ['/angular-route/angular-route'],
+        'angular-resource': ['/angular-resource/angular-resource'],
         'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min',
                    'jquery'],
         'd3': ['/d3/d3']
@@ -17,6 +18,10 @@ require.config({
         },
         'angular-route': {
             'exports': 'ngRoute',
+            'deps': ['angular']
+        },
+        'angular-resource': {
+            'exports': 'ngResource',
             'deps': ['angular']
         },
         'd3':{

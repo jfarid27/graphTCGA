@@ -3,14 +3,19 @@
     define([], function(){
 
         function ApiFactory(fileResource, folderResource){
-            var self = this
-
-            self.getFile = function(params){
-                return fileResource.get(params)
-            }
-
-            self.getFolder = function(params){
-                return folderResource.get(params)
+            return {
+                getFile: function(params){
+                    return fileResource.get(params)
+                },
+                getFolder: function(params){
+                    return folderResource.get(params)
+                },
+                downloadFile: function(params){
+                    return fileResource.get(params)
+                },
+                downloadGraph: function(params){
+                    return fileResource.download(params)
+                }
             }
         }
 
