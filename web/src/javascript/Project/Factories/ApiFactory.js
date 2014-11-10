@@ -11,10 +11,10 @@
                     return folderResource.get(params)
                 },
                 downloadFile: function(params){
-                    return fileResource.get(params)
+                    return fileResource.download(params)
                 },
                 downloadGraph: function(params){
-                    return fileResource.download(params)
+                    return fileResource.get(params)
                 }
             }
         }
