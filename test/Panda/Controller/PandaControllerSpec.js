@@ -10,7 +10,7 @@ describe('PandaController', function(){
         mockFileReaderEmitterClass,
         mockFileReaderEmitter,
         mockFolderStructureEmitter,
-        mockBufferToGraphEdges,
+        mockBufferToGraph,
         mockBufferString,
         mockBuffer;
 
@@ -45,7 +45,7 @@ describe('PandaController', function(){
             events.EventEmitter.call(self)
 
             self.on('getFile', function(params, success, error){
-                success(mockBuffer)
+                success(mockBuffer, params)
             })
 
         }
@@ -53,11 +53,24 @@ describe('PandaController', function(){
 
 
 
-        mockBufferToGraphEdges = function(buffer){
-            return [
-                {source:'foo', target:'bar', weight:0, strength:1},
-                {source:'zed', target:'foo', weight:0, strength:1},
-            ]
+        mockBufferToGraph = {
+
+                    bufferToLines : function(buffer, params){
+                        return "bufferToLines"
+                    },
+                    arrayToJson : function(){
+                        return "arrayToJson"
+                    },
+                    arrayToTsv : function(){
+                        return "arrayToTsv"
+                    },
+                    arrayToGephi : function(){
+                        return "arrayToGephi"
+                    },
+                    arrayToCytoscape : function(){
+                        return "arrayToCytoscape"
+                    },
+
         }
 
         mockFileReaderEmitter = new mockFileReaderEmitterClass()
@@ -65,7 +78,7 @@ describe('PandaController', function(){
 
         pandaController = new pandaControllerClass(mockFolderStructureEmitter,
                                                    mockFileReaderEmitter,
-                                                   mockBufferToGraphEdges)
+                                                   mockBufferToGraph)
     })
 
     describe('on getFile event', function(){
@@ -84,11 +97,12 @@ describe('PandaController', function(){
 
                 params.file.should.be.eql("foo")
                 params.folder.should.be.eql("bar")
+                params.format.should.be.eql("zed")
                 done()
 
             })
 
-            var params = {file:"foo", folder:"bar"}
+            var params = {file:"foo", folder:"bar", format:'zed'}
 
             var success = function(response){ return }
 
@@ -100,9 +114,9 @@ describe('PandaController', function(){
 
         it('should push file reading contents to parseBuffer', function(done){
 
-            pandaController.on('parseBuffer', function(params, success, error){
+            pandaController.on('parseBuffer', function(buffer, params, success, error){
 
-                params.buffer.toString().should.be.eql(mockBufferString)
+                buffer.toString().should.be.eql(mockBufferString)
 
                 done()
 
@@ -118,55 +132,106 @@ describe('PandaController', function(){
 
         })
 
-        it('should return buffer contents parsed to success function', function(done){
-
-            var params = {file:"foo", folder:"bar"}
-
-            var success = function(response){
-
-                response.edges.should.containEql(expected[0])
-                response.edges.should.containEql(expected[1])
-
-                done()
-            }
-
-            var error = function(){ return }
-
-            pandaController.emit('getFile', params, success, error)
-
-        })
     })
 
     describe('on parseBuffer event', function(){
 
-        var expected
+        var expected = {
+            json : "arrayToJson",
+            tsv : "arrayToTsv",
+            gephi : "arrayToGephi",
+            cytoscape : "arrayToCytoscape"
+        }
 
-        beforeEach(function(){
-            expected = [
-                {source:'foo', target:'bar', weight:0, strength:1},
-                {source:'zed', target:'foo', weight:0, strength:1},
-            ]
-        })
+        var results = {
+            json : undefined,
+            tsv : undefined,
+            gephi : undefined,
+            cytoscape : undefined
+        }
 
-        it('should parse given buffer with bufferToGraphEdges', function(done){
 
-            var params = {
-                    buffer: mockBuffer
-                },
-                error = function(){
-                    throw new Error("parseBuffer event failed")
-                },
-                success = function(response){
 
-                    response.edges.should.containEql(expected[0])
-                    response.edges.should.containEql(expected[1])
-                    done()
+        describe('with format equals json', function(){
+            beforeEach(function(){
+                var params = {file:"foo", folder:"bar", format:'json'}
 
+                var success = function(response){
+                    results.json = response
                 }
 
+                var error = function(){
+                    throw new Error("json failed")
+                }
 
-            pandaController.emit('parseBuffer', params, success, error)
+                pandaController.emit('getFile', params, success, error)
+            })
+
+            it('should call bufferToGraph.arrayToJson', function(){
+                results.json.should.eql(expected.json)
+            })
         })
+
+        describe('with format equals tsv', function(){
+            beforeEach(function(){
+                var params = {file:"foo", folder:"bar", format:'tsv'}
+
+                var success = function(response){
+                    results.tsv = response
+                }
+
+                var error = function(){
+                    throw new Error("tsv failed")
+                }
+
+                pandaController.emit('getFile', params, success, error)
+            })
+
+            it('should call bufferToGraph.arrayToTsv', function(){
+                results.tsv.should.eql(expected.tsv)
+            })
+        })
+
+        describe('with format equals gephi', function(){
+            beforeEach(function(){
+                var params = {file:"foo", folder:"bar", format:'gephi'}
+
+                var success = function(response){
+                    results.gephi = response
+                }
+
+                var error = function(){
+                    throw new Error("gephi failed")
+                }
+
+                pandaController.emit('getFile', params, success, error)
+            })
+
+            it('should call bufferToGraph.arrayToGephi', function(){
+                results.gephi.should.eql(expected.gephi)
+            })
+        })
+
+        describe('with format equals cytoscape', function(){
+            beforeEach(function(){
+                var params = {file:"foo", folder:"bar", format:'cytoscape'}
+
+                var success = function(response){
+                    results.cytoscape = response
+                }
+
+                var error = function(){
+                    throw new Error("cytoscape failed")
+                }
+
+                pandaController.emit('getFile', params, success, error)
+            })
+
+            it('should call bufferToGraph.arrayToCytoscape', function(){
+                results.cytoscape.should.eql(expected.cytoscape)
+            })
+        })
+
 
     })
 

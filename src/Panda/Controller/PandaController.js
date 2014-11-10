@@ -1,15 +1,15 @@
 var events = require('events'),
   util = require('util')
 
-var PandaController = function(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges){
+var PandaController = function(folderStructureEmitter, fileReaderEmitter, bufferToGraph){
     
     var self = this;
     events.EventEmitter.call(self);
 
     self.on('getFile', function(params, success, error){
 
-        var successCurry = function(buffer){
-            self.emit('parseBuffer', {buffer:buffer}, success, error)
+        var successCurry = function(buffer, params){
+            self.emit('parseBuffer', buffer, params, success, error)
             return
         }
 
@@ -24,11 +24,24 @@ var PandaController = function(folderStructureEmitter, fileReaderEmitter, buffer
         folderStructureEmitter.emit('getListFiles', params, success, error)
     })
 
-    self.on('parseBuffer', function(params, success, error){
-        var edges = bufferToGraphEdges(params.buffer);
-        self.emit('converted buffer to edges', {edges:edges})
-        success({edges:edges})
+    self.on('parseBuffer', function(buffer, params, success, error){
+
+        var data = bufferToGraph.bufferToLines(buffer, params)
+
+        if (params.format == 'tsv'){
+            success(bufferToGraph.arrayToTsv(data))
+        } else if (params.format == 'json'){
+            success(bufferToGraph.arrayToJson(data))
+        } else if (params.format == 'gephi') {
+            success(bufferToGraph.arrayToGephi(data))
+        } else if (params.format == 'cytoscape') {
+            success(bufferToGraph.arrayToCytoscape(data))
+        } else {
+            error("Error on buffer parsing")
+        }
+
     })
+
 
 }
 util.inherits(PandaController, events.EventEmitter)

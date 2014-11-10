@@ -91,7 +91,6 @@ describe('folderStructParseEmitter', function(){
       it('should return all files in every folder', function(done){
         
         var callback = function(resp){
-            console.log(resp)
           resp.folders.should.containEql(testFolderStruct.folders[0])
           resp.folders.should.containEql(testFolderStruct.folders[1])
           done()

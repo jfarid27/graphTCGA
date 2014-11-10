@@ -27,7 +27,7 @@ var databaseConnectionEmitter = function(pathString, readableStreamAccumulator, 
 
         stream.on('close', function(){
             if (self.cache){
-                success(self.cache)
+                success(self.cache, params)
             } else {
                 error("Accumulator closed with no cache data present")
                 self.emit('error')
