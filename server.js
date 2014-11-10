@@ -9,11 +9,11 @@ app.use(express.static(__dirname + '/bower_components'))
 app.use(express.static(__dirname + '/bower_components/jquery'))
 
 
-function start() {
+function start(port) {
 
     panda.addRoutesTo(app, './src/Panda/Data')
 
-    app.listen(3000, function(){
+    app.listen(port, function(){
         console.log('Waiting for requests...')
     })    
 
