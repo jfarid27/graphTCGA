@@ -14,10 +14,10 @@ var pandaExpress = function(app, pathToFiles) {
     var fileReaderEmitter = require('./Modules/databaseConnectionEmitter.js')
         .get(pathToFiles, readableStreamAccumulator, fs)
 
-    var bufferToGraphEdges = require('./Modules/arrayToGraphEdge.js').bufferToGraphEdges
+    var bufferToGraph = require('./Modules/arrayToGraph.js').get()
 
     var pandaController = require('./Controller/PandaController.js')
-        .get(folderStructParseEmitter, fileReaderEmitter, bufferToGraphEdges);
+        .get(folderStructParseEmitter, fileReaderEmitter, bufferToGraph);
 
 
     pandaRest(app, pandaController)

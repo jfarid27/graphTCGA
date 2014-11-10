@@ -26,7 +26,7 @@ var PandaController = function(folderStructureEmitter, fileReaderEmitter, buffer
 
     self.on('parseBuffer', function(buffer, params, success, error){
 
-        var data = bufferToGraph.bufferToLines(buffer)
+        var data = bufferToGraph.bufferToLines(buffer, params)
 
         if (params.format == 'tsv'){
             success(bufferToGraph.arrayToTsv(data))
