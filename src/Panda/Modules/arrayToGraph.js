@@ -105,10 +105,6 @@ function arrayToCytoscape(arr){
         response.elements.edges.push(transform)
     }
 
-
-
-    console.log(response)
-
     return response
 }
 
