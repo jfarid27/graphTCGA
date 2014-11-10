@@ -2,7 +2,7 @@ var construct = require('./../../../src/Panda/Modules/arrayToGraph.js').construc
 should = require('should')
 
 
-describe.only('arrayToGraph', function(){
+describe('arrayToGraph', function(){
 
     var testArray, testMultipleArrays, arrayToGraph
 
