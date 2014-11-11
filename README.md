@@ -10,12 +10,13 @@ A Node.js server for visualizing, downloading, and transforming PANDA networks.
 ```bash
 node index.js -i <Number> -z <Number> -f <Format> [--output=<String>] <PandaDataFile>
 ```
-* -i - (required) Panda interaction threshold. All edges with interaction equal to or greater than this number will be added.
-* -z - (required) Panda double-sided Z-Score threshold. All edges with Z-Score equal to or greater than this number will be added.
-* -f - (required) Output format.
-* <Format> = json | tsv | gephi | cytoscape
-* -o - (Optional) Output filepath to create a new file for filtering. If this parameter isn't set, the program will print to STDOUT for piping on unix-like systems.
-* <PandaDataFile> - (required) Path to Panda data file you want to filter.
+
+#####Flags
+* -i - _(required)_ Panda interaction threshold. All edges with interaction equal to or greater than this number will be added.
+* -z - _(required)_ Panda double-sided Z-Score threshold. All edges with Z-Score equal to or greater than this number will be added.
+* -f - _(required)_ Output format. Format = json | tsv | gephi | cytoscape
+* -o - _(optional)_ Output filepath to create a new file for filtering. If this parameter isn't set, the program will print to STDOUT for piping on unix-like systems.
+* PandaDataFile - _(required)_ Path to Panda data file you want to filter.
 
 ###Starting the server
 1. Install deps
