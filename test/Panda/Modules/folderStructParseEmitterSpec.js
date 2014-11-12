@@ -33,7 +33,7 @@ describe('folderStructParseEmitter', function(){
     it('should populate callback with names of subfolders', function(done){
 
 
-      var expected = ["MicroArray", "RNASeq"]
+      var expected = testFolderStruct.folders
       var callback = function(response){
 
         response.folders.should.containEql(expected[0])
