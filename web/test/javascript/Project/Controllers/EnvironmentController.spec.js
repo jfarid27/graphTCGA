@@ -219,11 +219,39 @@
                         })
 
                         it('should call Api getfile', function(){
-
                             expect(Api.getFile).toHaveBeenCalledWith(expected)
                         })
                     })
 
+                })
+
+                describe('downloadGraph emitter wrapper', function(){
+                    describe('when called', function(){
+
+                        beforeEach(function(){
+                            spyOn($scope, '$emit')
+                            $scope.downloadGraph()
+                        })
+
+                        it('should fire downloadGraph event', function(){
+
+                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph')
+                        })
+                    })
+                })
+
+                describe('visualizeGraph emitter wrapper', function(){
+                    describe('when called', function(){
+
+                        beforeEach(function(){
+                            spyOn($scope, '$emit')
+                            $scope.visualizeGraph()
+                        })
+
+                        it('should fire visualizeGraph event', function(){
+                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph')
+                        })
+                    })
                 })
             })
         })

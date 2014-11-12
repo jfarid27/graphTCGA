@@ -55,6 +55,14 @@
                 }
             })
 
+            $scope.visualizeGraph = function(){
+                $scope.$emit('visualizeGraph')
+            }
+
+            $scope.downloadGraph = function(){
+                $scope.$emit('downloadGraph')
+            }
+
         }
 
     })
