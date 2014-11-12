@@ -20,14 +20,13 @@
             $scope.$on('visualizeGraph', function(event){
                 if ($scope.environment.selectedFolder &&
                     $scope.environment.selectedFile &&
-                    $scope.environment.selectedType &&
                     $scope.environment.interactionThreshold &&
                     $scope.environment.zScoreThreshold){
 
                     var params = {
                         folder: $scope.environment.selectedFolder.name,
                         file: $scope.environment.selectedFile,
-                        format: $scope.environment.selectedType.value,
+                        format: "cytoscape",
                         interactionThreshold: $scope.environment.interactionThreshold,
                         zScoreThreshold: $scope.environment.zScoreThreshold
                     }

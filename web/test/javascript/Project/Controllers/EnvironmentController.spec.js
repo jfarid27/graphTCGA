@@ -161,7 +161,6 @@
                               ]
                             }
                             $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
-                            $scope.environment.selectedType = {name:'Cytoscape', value:'cytoscape'}
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = 1
 
