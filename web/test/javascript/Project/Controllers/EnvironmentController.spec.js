@@ -30,46 +30,64 @@
 
                 Api = {
                     getFile: function(params){
-                        return 'zed'
-                    },
-                    downloadGraph: function(params){
                         return {
                             $promise: {
                                 then: function(success){
-                                    success({edges: ['foo', 'bar']})
+                                    success({edges: ['blah', 'blah2']})
                                 }
                             }
                         }
                     },
                     downloadFile: function(params){ return },
                     getFolder: function(params){
-                        return (params && params.folder) ? {
+                        return {
                             $promise: {
                                 then: function(success){
-                                    success({files: ['foo']})
-                                }
-                            }
-                        }
 
-                        : {
-                            $promise: {
-                                then: function(success){
-                                    success({folders: ['bar']})
+                                    var response = {
+                                        folders:[{
+                                          name:"MicroArray",
+                                          files: [
+                                            "BRCA_FinalNetwork.pairs"
+                                          ]
+                                        },
+                                        {
+                                          name:"RNASeq",
+                                          files: [
+                                            "MVA_FinalNetwork.pairs"
+                                          ]
+
+                                        }]
+                                    }
+
+                                    success(response)
                                 }
                             }
                         }
                     }
                 }
-                spyOn(Api, 'getFolder').and.callThrough()
 
-                Environment = {
-                    selectedFolder: undefined,
-                    selectedFiles: undefined,
-                    availableFolders: undefined,
-                    availableFiles: undefined
+
+                Environment = function(){
+                    self.selectedFolder = undefined
+                    self.selectedFiles = undefined
+                    self.selectedType = undefined
+                    self.availableTypes = [
+                        {name:'.JSON', value:'json'},
+                        {name:'.TSV', value:'tsv'},
+                        {name:'Gephi', value:'gephi'},
+                        {name:'Cytoscape', value:'cytoscape'}
+                    ]
+                    self.availableFolders = undefined
+                    self.availableFiles = undefined
+                    self.interactionThreshold = undefined
+                    self.zScoreThreshold = undefined
+                    self.graph = undefined
                 }
 
-                EnvironmentController($scope, Environment, Api)
+                spyOn(Api, 'getFolder').and.callThrough()
+
+                EnvironmentController($scope, new Environment, Api)
 
 
             })
@@ -78,101 +96,163 @@
 
                 describe('initialization', function(){
 
+                    var expected
+
+                    beforeEach(function(){
+                        expected = [{
+                          name:"MicroArray",
+                          files: [
+                            "BRCA_FinalNetwork.pairs"
+                          ]
+                        },
+                        {
+                          name:"RNASeq",
+                          files: [
+                            "MVA_FinalNetwork.pairs"
+                          ]
+
+                        }]
+                    })
+
                     it('should call api to get available folders', function(){
                         expect(Api.getFolder).toHaveBeenCalled()
                     })
                     it('should add available folders to scope', function(){
-                        expect($scope.environment.availableFolders).toContain('bar')
+                        expect($scope.environment.availableFolders).toContain(expected[0])
+                        expect($scope.environment.availableFolders).toContain(expected[1])
                     })
                 })
 
-                describe('on selectedFolder watch call', function(){
+                describe('environment.selectedFolder registered watcher', function(){
+                    describe('when fired', function(){
 
-                    var selectedFolder = 'foo'
+                        beforeEach(function(){
 
-                    it('should emit onFolderSelect event if selected folder is not null', function(){
+                            $scope.environment.selectedFolder = {
+                              name:"MicroArray",
+                              files: [
+                                "BRCA_FinalNetwork.pairs"
+                              ]
+                            }
 
-                        spyOn($scope, '$emit')
+                            $scope.$registeredWatchers['environment.selectedFolder']('MicroArray')
+                        })
 
-                        $scope.$registeredWatchers['environment.selectedFolder']('foo')
-                        expect($scope.$emit).toHaveBeenCalledWith('onFolderSelect', {'folder': 'foo'})
+                        it('should populate environment.availableFiles correctly', function(){
+                            expect($scope.environment.availableFiles).toContain("BRCA_FinalNetwork.pairs")
+                        })
+                    })
+                })
+
+                describe('visualizeGraph event', function(){
+
+                    describe('when called with valid environment selections', function(){
+
+                        var expected
+
+                        beforeEach(function(){
+                            spyOn(Api, 'getFile').and.callThrough()
+
+
+                            $scope.environment.selectedFolder = {
+                              name:"MicroArray",
+                              files: [
+                                "BRCA_FinalNetwork.pairs"
+                              ]
+                            }
+                            $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
+                            $scope.environment.interactionThreshold = 1
+                            $scope.environment.zScoreThreshold = 1
+
+                            expected = {
+                                folder: "MicroArray",
+                                file: "BRCA_FinalNetwork.pairs",
+                                format: 'cytoscape',
+                                interactionThreshold: 1,
+                                zScoreThreshold: 1
+                            }
+
+                            $scope.$emit('visualizeGraph')
+                        })
+
+                        it('should call Api getfile', function(){
+
+                            expect(Api.getFile).toHaveBeenCalledWith(expected)
+                        })
+
+                        it('should populate environment.graph with response', function(){
+                            expect($scope.environment.graph.edges).toContain('blah')
+                            expect($scope.environment.graph.edges).toContain('blah2')
+                        })
+                    })
+                })
+
+                describe('downloadGraph event', function(){
+
+                    describe('when called with valid environment selections', function(){
+
+                        var expected
+
+                        beforeEach(function(){
+                            spyOn(Api, 'getFile').and.callThrough()
+
+                            $scope.environment.selectedFolder = {
+                              name:"MicroArray",
+                              files: [
+                                "BRCA_FinalNetwork.pairs"
+                              ]
+                            }
+                            $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
+                            $scope.environment.selectedType = {name:'.JSON', value:'json'}
+                            $scope.environment.interactionThreshold = 1
+                            $scope.environment.zScoreThreshold = 1
+
+                            expected = {
+                                folder: "MicroArray",
+                                file: "BRCA_FinalNetwork.pairs",
+                                format: 'json',
+                                interactionThreshold: 1,
+                                zScoreThreshold: 1
+                            }
+
+                            $scope.$emit('downloadGraph')
+                        })
+
+                        it('should call Api getfile', function(){
+                            expect(Api.getFile).toHaveBeenCalledWith(expected)
+                        })
                     })
 
                 })
 
-                describe('on onFolderSelect event', function(){
+                describe('downloadGraph emitter wrapper', function(){
+                    describe('when called', function(){
 
-                    var params, results
+                        beforeEach(function(){
+                            spyOn($scope, '$emit')
+                            $scope.downloadGraph()
+                        })
 
-                    beforeEach(function(){
+                        it('should fire downloadGraph event', function(){
 
-                        params = {folder: 'foo'}
-
-                        spyOn($scope.$registeredEvents, 'onFolderSelect').and.callThrough()
-                        $scope.$emit('onFolderSelect', params)
-                    })
-
-                    it('should call getFolder on api', function(){
-                        expect(Api.getFolder).toHaveBeenCalledWith({folder:'foo'})
-                    })
-                    it('should populate available files on scope', function(){
-                        expect($scope.$registeredEvents['onFolderSelect']).toHaveBeenCalled()
-                        expect($scope.environment.availableFiles).toContain('foo')
+                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph')
+                        })
                     })
                 })
 
-                describe('on onFileSelect event', function(){
+                describe('visualizeGraph emitter wrapper', function(){
+                    describe('when called', function(){
 
-                    var params, results
+                        beforeEach(function(){
+                            spyOn($scope, '$emit')
+                            $scope.visualizeGraph()
+                        })
 
-                    beforeEach(function(){
-                        params = {file: 'foo'}
-                        spyOn($scope.$registeredEvents, 'onFileSelect').and.callThrough()
-                        $scope.$emit('onFileSelect', params)
-                    })
-
-                    it('should update selected file', function(){
-                        expect($scope.environment.selectedFile).toBe('foo')
-                    })
-                })
-
-                describe('on onDownloadGraph event', function(){
-
-                    var params, results
-
-                    beforeEach(function(){
-                        params = {file:'foo', folder:'zed'}
-
-                        spyOn($scope.$registeredEvents, 'onDownloadGraph').and.callThrough()
-                        spyOn(Api, 'downloadGraph').and.callThrough()
-                        $scope.$emit('onDownloadGraph', params)
-
-                    })
-
-                    it('should call downloadGraph on Api', function(){
-                        expect(Api.downloadGraph).toHaveBeenCalledWith({file:'foo', folder:'zed'})
-
-                    })
-
-                    it('should populate scope with downloadGraph response', function(){
-                        expect($scope.environment.graph.edges).toContain('foo')
-                        expect($scope.environment.graph.edges).toContain('bar')
+                        it('should fire visualizeGraph event', function(){
+                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph')
+                        })
                     })
                 })
-
-                describe('on onDownloadFile event', function(){
-
-                    it('should call Api.downloadFile', function(){
-
-                        spyOn(Api, 'downloadFile')
-
-                        $scope.$emit('onDownloadFile', {file:'foo', folder:'bar'})
-
-                        expect(Api.downloadFile).toHaveBeenCalledWith({file:'foo', folder:'bar'})
-                    })
-
-                })
-
             })
         })
 

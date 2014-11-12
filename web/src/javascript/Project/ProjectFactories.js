@@ -15,11 +15,10 @@
             .factory('Project.FileResource', ['$resource', function($resource){
                 return $resource('/file',{},{
                     get:{
-                        method:"GET"
-                    },
-                    download:{
-                        url:"/download",
-                        method:"GET"
+                        method:"GET",
+                        params:{
+                            'format':'cytoscape'
+                        }
                     }
                 })
             }])

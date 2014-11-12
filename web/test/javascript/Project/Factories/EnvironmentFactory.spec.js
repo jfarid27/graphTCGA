@@ -1,7 +1,6 @@
 (function(){
 
-    var deps = [        './../../../../src/javascript/Project/Factories/EnvironmentFactory'
-    ];
+    var deps = ['./../../../../src/javascript/Project/Factories/EnvironmentFactory'];
 
     define(deps, function(EnvironmentFactory){
 
@@ -21,7 +20,7 @@
 
             describe('selectedFiles property', function(){
                 it('should be defined', function(){
-                    expect(Object.keys(environment)).toContain('selectedFiles')
+                    expect(Object.keys(environment)).toContain('selectedFile')
                 })
             })
 

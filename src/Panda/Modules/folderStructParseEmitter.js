@@ -9,7 +9,6 @@ var folderStructParseEmitter = function(folderStruct){
   self.on('getFolders', function(params, callback, err){
 
     var list = folderStruct.folders
-      .map(function(folder){ return folder.name }) 
 
     callback({folders:list})
 

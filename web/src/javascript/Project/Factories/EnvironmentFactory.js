@@ -7,9 +7,14 @@
             var self = this;
 
             self.selectedFolder = undefined
-            self.selectedFiles = undefined
+            self.selectedFile = undefined
             self.selectedType = undefined
-            self.availableTypes = ['.json', '.tsv', '.tsv (Gephi)', '.cyjs (Cytoscape)']
+            self.availableTypes = [
+                        {name:'.JSON', value:'json'},
+                        {name:'.TSV', value:'tsv'},
+                        {name:'Gephi', value:'gephi'},
+                        {name:'Cytoscape', value:'cytoscape'}
+                    ]
             self.availableFolders = undefined
             self.availableFiles = undefined
             self.interactionThreshold = undefined

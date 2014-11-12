@@ -33,7 +33,8 @@ function getFile(controller){
       }
 
       var resErrWrapper = function(msg) {
-        response.status(501).json({error:"Failed on file get"})
+        response.status(501)
+        .json({error:"Failed on file get", message: msg})
       }
 
       if(params.format == 'json' || params.format == 'cytoscape'){

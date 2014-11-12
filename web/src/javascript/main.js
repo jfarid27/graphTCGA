@@ -10,7 +10,8 @@ require.config({
         'angular-resource': ['/angular-resource/angular-resource'],
         'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min',
                    'jquery'],
-        'd3': ['/d3/d3']
+        'd3': ['/d3/d3'],
+        'cytoscape': ['/cytoscape/dist/cytoscape']
     },
     'shim': {
         'angular': {
@@ -26,6 +27,9 @@ require.config({
         },
         'd3':{
             'exports': 'd3'
+        },
+        'cytoscape':{
+            'exports': 'cytoscape'
         }
     },
 

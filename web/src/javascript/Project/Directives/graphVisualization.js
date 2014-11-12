@@ -1,6 +1,6 @@
 (function(){
 
-    define(['d3', 'jquery'], function(d3){
+    define(['cytoscape', './graphLayoutSettings', './graphStyleSettings'], function(cytoscape, layoutSettings, styleSettings){
 
         return function(module){
 
@@ -10,45 +10,44 @@
                     templateUrl: module.urlPath+'/Directives/templates/graphVisualization.html',
                     link: function(scope, element, attributes){
 
-                        var svg = d3.select('svg#graphVis')
-                            .attr('width', 500)
-                            .attr('height', 900);
-
                         scope.$watch('environment.graph', function(newval){
-                            if (newval && newval.edges) {
 
-                                var graph = newval
+                            if (newval){
 
-                                svg.selectAll().remove()
-
-                                var prenodes = {};
-                                graph.edges.map(function(edge){
-
-                                    if( !(edge.source in prenodes)) {
-                                        prenodes[edge.source] = Object.keys(prenodes).length
-                                        console.log(prenodes[edge.source])
-                                    }
-                                    if( !(edge.target in prenodes)) {
-                                        prenodes[edge.target] = Object.keys(prenodes).length
-                                    }
-                                })
-
-                                var nodes = Object.keys(prenodes).map(function(nodestring, index){
-                                    return {id:nodestring, index:index}
-                                })
-
-                                var edges = graph.edges.map(function(edge){
-                                    return {
-                                        source:prenodes[edge.source],
-                                        target:prenodes[edge.target],
-                                        weight: parseFloat(edge.weight)
-                                    }
-                                })
-
-
-
-
-
+                                var options = {
+                                    container: document.getElementById('vis'),
+                                    elements: scope.environment.graph.elements,
+                                    style: styleSettings,
+                                    layout: layoutSettings,
+                                    ready: function(event){
+                                        return
+                                    },
+                                    zoom: 1,
+                                    pan: { x:0, y:0},
+                                    minZoom: 1e-50,
+                                    maxZoom: 1e50,
+                                    zoomingEnabled: true,
+                                    userZoomingEnabled: true,
+                                    panningEnabled: true,
+                                    userPanningEnabled: true,
+                                    selectionType: 'additive',
+                                    autolock: false,
+                                    autoungrabify: false,
+                                    autounselectify: false,
+                                    headless: false,
+                                    styleEnabled: true,
+                                    hideEdgesOnViewport: false,
+                                    hideLabelsOnViewport: false,
+                                    textureOnViewport: true,
+                                    motionBlur: false,
+                                    wheelSensitivity: 1,
+                                    pixelRatio: 1,
+                                    initRender: function(event){
+                                        return
+                                    },
+                                    renderer: {}
+                                }
+                                var cy = cytoscape(options)
                             }
                         });
 
