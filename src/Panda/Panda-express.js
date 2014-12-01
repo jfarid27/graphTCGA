@@ -1,9 +1,10 @@
 var fs = require('fs'),
     pandaRest = require('./Rest/PandaRest.js').rest,
-    fileStructure = require('./Data/fileStructure.js');
+    fileStructure = require('./Data/fileStructure.js'),
+    mongoClient = require('mongodb').MongoClient;
 
 
-var pandaExpress = function(app, pathToFiles) {
+var pandaExpress = function(app, dbUrl) {
 
     var folderStructParseEmitter = require('./Modules/folderStructParseEmitter.js')
         .get(fileStructure)
@@ -11,13 +12,13 @@ var pandaExpress = function(app, pathToFiles) {
     var readableStreamAccumulator = require('./Modules/readableStreamAccumulator.js')
         .construct
 
-    var fileReaderEmitter = require('./Modules/databaseConnectionEmitter.js')
-        .get(pathToFiles, readableStreamAccumulator, fs)
+    var dbConnectionEmitter = require('./Modules/DBConnectionEmitter.js')
+        .get(dbUrl, mongoClient)
 
     var bufferToGraph = require('./Modules/arrayToGraph.js').get()
 
     var pandaController = require('./Controller/PandaController.js')
-        .get(folderStructParseEmitter, fileReaderEmitter, bufferToGraph);
+        .get(folderStructParseEmitter, dbConnectionEmitter, bufferToGraph);
 
 
     pandaRest(app, pandaController)
