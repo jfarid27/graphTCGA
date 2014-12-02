@@ -33,10 +33,9 @@ function DBConnectionEmitter(dburl, dbClient){
                     return
                 }
 
+                var query = {zScore:{$gt:+params.zScoreThreshold}}
 
-                var query = {zScore:{$gt:params.zScoreThreshold}, _id:0}
-
-                var cursorStream = collection.find(query).stream()
+                var cursorStream = collection.find(query, {_id:0}).stream()
 
                 cursorStream.on('data', function(data){
                     self.emit('data', data)

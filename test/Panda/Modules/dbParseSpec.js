@@ -16,12 +16,17 @@
 
         describe('parse method', function(){
 
-            var dataArray, returnGraph
+            var dataArray, returnGraph, expectedArray
 
             beforeEach(function(){
                 dataArray = [
                     {source:'foo', target:'bar', zScore:4, interaction:1},
                     {source:'bar', target:'zed', zScore:4, interaction:1}
+                ]
+
+                expectedArray = [
+                    {source:0, target:1, zScore:4, interaction:1},
+                    {source:1, target:2, zScore:4, interaction:1}
                 ]
             })
 
@@ -30,7 +35,7 @@
                 var response
 
                 beforeEach(function(){
-                    response = dbParser.parse(dataArray, {type:'json'})
+                    response = dbParser.parse(dataArray, {format:'json'})
                 })
 
                 describe('return graph', function(){
@@ -49,7 +54,10 @@
 
                     describe('edges property', function(){
                         it('should just return given edges array', function(){
-                            response.edges.should.eql(dataArray)
+                            response.edges
+                                .should.containEql(expectedArray[0])
+                            response.edges
+                                .should.containEql(expectedArray[1])
                         })
                     })
                 })

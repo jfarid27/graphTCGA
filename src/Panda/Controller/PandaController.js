@@ -11,15 +11,13 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
 
     self.on('getFile', function(params, success, error){
 
-
-
         dbConnectionEmitter.on('data', function(data){
             self.buffer.push(data)
         })
 
         dbConnectionEmitter.on('close', function(){
-            success(dbParseModule.parse(params, self.buffer))
-            self.buffer = []
+            var data = dbParseModule.parse(self.buffer, params)
+            success(data)
         })
 
         dbConnectionEmitter.on('error', function(){
