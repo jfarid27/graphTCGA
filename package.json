@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive && ./node_modules/karma/bin/karma start --single-run",
-    "start": "node index.js -p 2277 -d 2278",
+    "start": "node index.js -p 2277 -d 27017",
     "dev-server": "./node_modules/mocha/bin/mocha --recursive -R spec -w",
     "test-verbose-server": "./node_modules/mocha/bin/mocha --recursive -R spec",
     "dev-web": "./node_modules/karma/bin/karma start",
