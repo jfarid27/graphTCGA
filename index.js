@@ -5,9 +5,9 @@ if (!argvs) {
     return
 }
 
-if (argvs['p'] && !argvs['t'] && !argvs['i'] && !argvs['output']) {
+if (argvs['p'] && argvs['d'] && !argvs['t'] && !argvs['i'] && !argvs['output']) {
     var server = require('./server.js')
-    server.start(argvs['p'])
+    server.start(argvs['p'], argvs['d'] + '/panda')
 }
 
 if (argvs['z'] && argvs['i'] && argvs['_'].length == 1 && argvs['output'] && argvs['f']){
