@@ -5,302 +5,138 @@ var pandaControllerClass = require('./../../../src/Panda/Controller/PandaControl
 
 describe('PandaController', function(){
 
-    var pandaController,
-        mockFolderStructureEmitterClass,
-        mockFileReaderEmitterClass,
-        mockFileReaderEmitter,
+    var mockDbParseModule,
         mockFolderStructureEmitter,
-        mockBufferToGraph,
-        mockBufferString,
-        mockBuffer;
+        mockDBConnectionEmitter
 
     beforeEach(function(){
 
-        //FolderStructEmitter
-        mockFolderStructureEmitterClass = function(){
-            var self = this
-            events.EventEmitter.call(self)
-
-            self.on('getFolders', function(params, success, error){
-
-                success(['foo', 'bar'])
-
-            })
-
-            self.on('getListFiles', function(params, success, error){
-
-                success("foo")
-
-            })
-
-        }
-        util.inherits(mockFolderStructureEmitterClass, events.EventEmitter)
-
-        //FileReader
-        mockBufferString = "foo\tbar\t0\t1\nbar\tfoo\t0\t1"
-        mockBuffer = new Buffer(mockBufferString);
-        mockFileReaderEmitterClass = function(readableStream){
-
-            var self = this
-            events.EventEmitter.call(self)
-
-            self.on('getFile', function(params, success, error){
-                success(mockBuffer, params)
-            })
-
-        }
-        util.inherits(mockFileReaderEmitterClass, events.EventEmitter)
-
-
-
-        mockBufferToGraph = {
-
-                    bufferToLines : function(buffer, params){
-                        return "bufferToLines"
-                    },
-                    arrayToJson : function(){
-                        return "arrayToJson"
-                    },
-                    arrayToTsv : function(){
-                        return "arrayToTsv"
-                    },
-                    arrayToGephi : function(){
-                        return "arrayToGephi"
-                    },
-                    arrayToCytoscape : function(){
-                        return "arrayToCytoscape"
-                    },
-
+        mockDbParseModule = {
+            parse: function(){return 'foo'}
         }
 
-        mockFileReaderEmitter = new mockFileReaderEmitterClass()
-        mockFolderStructureEmitter = new mockFolderStructureEmitterClass()
+        mockFolderStructureEmitter = {
+             on: function(event, callback){
+                if(this.$registeredWatchers[event]){
+                    this.$registeredWatchers[event].push(callback)
+                } else {
+                    this.$registeredWatchers[event] = [callback]
+                }
+            },
+            emit: function(){
+                var self = this;
+                var args = Array.prototype.slice.call(arguments)
+                var event = args.shift()
+                for (var k in self.$registeredWatchers[event]) {
+                    self.$registeredWatchers[event][k].apply(self, args)
+                }
+            },
+            $registeredWatchers: {}
+        }
 
-        pandaController = new pandaControllerClass(mockFolderStructureEmitter,
-                                                   mockFileReaderEmitter,
-                                                   mockBufferToGraph)
+        mockDBConnectionEmitter = {
+            on: function(event, callback){
+                if(this.$registeredWatchers[event]){
+                    this.$registeredWatchers[event].push(callback)
+                } else {
+                    this.$registeredWatchers[event] = [callback]
+                }
+            },
+            emit: function(){
+                var self = this;
+                var args = Array.prototype.slice.call(arguments)
+                var event = args.shift()
+                for (var k in self.$registeredWatchers[event]) {
+                    self.$registeredWatchers[event][k].apply(self, args)
+                }
+            },
+            $registeredWatchers: {}
+        }
+    })
+
+    afterEach(function(){
+
+        mockDbParseModule = undefined
+        mockFolderStructureEmitter = undefined
+        mockDBConnectionEmitter = undefined
+
     })
 
     describe('on getFile event', function(){
 
-        var expected = [
-                {source:'foo', target:'bar', weight:0, strength:1},
-                {source:'zed', target:'foo', weight:0, strength:1},
-            ],
-            success,
-            bufferStringResponse,
-            response;
 
-        it('should call getFile event on fileReader with given params', function(done){
+        var Controller
 
-            mockFileReaderEmitter.on('getFile', function(params, success, error){
+        beforeEach(function(){
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule)
+        })
 
-                params.file.should.be.eql("foo")
-                params.folder.should.be.eql("bar")
-                params.format.should.be.eql("zed")
+        it('should emit getFile on dbConnection', function(done){
+            mockDBConnectionEmitter.on('getFile', function(params){
+                params.data.should.eql('foo')
                 done()
-
             })
 
-            var params = {file:"foo", folder:"bar", format:'zed'}
-
-            var success = function(response){ return }
-
-            var error = function(){ return }
-
-            pandaController.emit('getFile', params, success, error)
-
+            Controller.emit('getFile', {data:'foo'})
         })
 
-        it('should push file reading contents to parseBuffer', function(done){
+        describe('on DBConnection data event', function(){
 
-            pandaController.on('parseBuffer', function(buffer, params, success, error){
-
-                buffer.toString().should.be.eql(mockBufferString)
-
-                done()
-
-            })
-
-            var params = {file:"foo", folder:"bar"}
-
-            var success = function(response){ return }
-
-            var error = function(){ return }
-
-            pandaController.emit('getFile', params, success, error)
-
-        })
-
-    })
-
-    describe('on parseBuffer event', function(){
-
-        var expected = {
-            json : "arrayToJson",
-            tsv : "arrayToTsv",
-            gephi : "arrayToGephi",
-            cytoscape : "arrayToCytoscape"
-        }
-
-        var results = {
-            json : undefined,
-            tsv : undefined,
-            gephi : undefined,
-            cytoscape : undefined
-        }
-
-
-
-        describe('with format equals json', function(){
             beforeEach(function(){
-                var params = {file:"foo", folder:"bar", format:'json'}
-
-                var success = function(response){
-                    results.json = response
-                }
-
-                var error = function(){
-                    throw new Error("json failed")
-                }
-
-                pandaController.emit('getFile', params, success, error)
+                Controller.emit('getFile', {data:'foo'})
             })
 
-            it('should call bufferToGraph.arrayToJson', function(){
-                results.json.should.eql(expected.json)
+            it('should buffer data', function(){
+                mockDBConnectionEmitter.emit('data', 'foo')
+                Controller.buffer.length.should.eql(1)
+                Controller.buffer.should.containEql('foo')
             })
         })
 
-        describe('with format equals tsv', function(){
-            beforeEach(function(){
-                var params = {file:"foo", folder:"bar", format:'tsv'}
+        describe('on DBConnection close event', function(){
 
-                var success = function(response){
-                    results.tsv = response
+            it('should call success with dbParse on buffered result', function(done){
+
+                var successCurry = function(data){
+                    data.should.eql('foo')
+                    done()
                 }
 
-                var error = function(){
-                    throw new Error("tsv failed")
-                }
+                Controller.emit('getFile', {data:'foo'}, successCurry)
 
-                pandaController.emit('getFile', params, success, error)
-            })
+                mockDBConnectionEmitter.emit('close')
 
-            it('should call bufferToGraph.arrayToTsv', function(){
-                results.tsv.should.eql(expected.tsv)
             })
         })
 
-        describe('with format equals gephi', function(){
-            beforeEach(function(){
-                var params = {file:"foo", folder:"bar", format:'gephi'}
+        describe('on DBConnection error event', function(){
+            it('should call error', function(done){
 
-                var success = function(response){
-                    results.gephi = response
-                }
+                Controller.on('error', function(){ done() })
+                Controller.emit('getFile', {data:'foo'})
 
-                var error = function(){
-                    throw new Error("gephi failed")
-                }
-
-                pandaController.emit('getFile', params, success, error)
-            })
-
-            it('should call bufferToGraph.arrayToGephi', function(){
-                results.gephi.should.eql(expected.gephi)
+                mockDBConnectionEmitter.emit('error')
             })
         })
-
-        describe('with format equals cytoscape', function(){
-            beforeEach(function(){
-                var params = {file:"foo", folder:"bar", format:'cytoscape'}
-
-                var success = function(response){
-                    results.cytoscape = response
-                }
-
-                var error = function(){
-                    throw new Error("cytoscape failed")
-                }
-
-                pandaController.emit('getFile', params, success, error)
-            })
-
-            it('should call bufferToGraph.arrayToCytoscape', function(){
-                results.cytoscape.should.eql(expected.cytoscape)
-            })
-        })
-
-
     })
 
     describe('on getFolders event', function(){
 
-        var expected
+        var Controller
 
         beforeEach(function(){
-            expected = ['foo', 'bar']
-        })
-
-        it("should call folderStructureEmitter's getFolders event", function(done){
-
-            var success = function(){ done() }
-
-            mockFolderStructureEmitter.on('getFolders', success)
-
-            pandaController.emit('getFolders', {}, function(){return}, function(){return})
-        })
-
-        it('should pass given success to fileStructureEmitter', function(done){
-
-            var params,
-                error = function(){ throw new Error('panda listFiles errored out')},
-                success = function(response){
-
-                    response.should.containEql(expected[0])
-                    response.should.containEql(expected[1])
-                    done()
-                }
-
-            pandaController.emit('getFolders', params, success, error)
-
-        })
-
-    })
-
-    describe('on getListFiles event', function(){
-
-        var expected
-
-        beforeEach(function(){
-            expected = ['foo', 'bar']
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule)
         })
 
 
-        it("should call folderStructureEmitter's getListFiles event", function(done){
+        it('should emit getFolder on folderStructureEmitter', function(done){
 
-            var success = function(){ done() }
+            mockFolderStructureEmitter.on('getFolders', function(){
+                done()
+            })
 
-            mockFolderStructureEmitter.on('getListFiles', success)
-
-            pandaController.emit('getListFiles', {}, function(){ return }, function(){ return })
+            Controller.emit('getFolders')
         })
-
-        it('should pass given success to fileStructureEmitter', function(done){
-
-            var params,
-                error = function(){ throw new Error('panda listFiles errored out')},
-                success = function(response){
-
-                    response.should.eql("foo")
-                    done()
-                }
-
-            pandaController.emit('getListFiles', params, success, error)
-
-        })
-
     })
 
 })
