@@ -4,7 +4,7 @@
     <h6>Sequence Type:</h6>
     <select ng-model="environment.selectedFolder" ng-options="folder.name for folder in environment.availableFolders"></select>
     <h6>Cancer Data Type:</h6>
-    <select ng-model="environment.selectedFile" ng-options="file for file in environment.availableFiles"></select>
+    <select ng-model="environment.selectedFile" ng-options="file.name for file in environment.availableFiles"></select>
     <h6>File Format:</h6>
     <select ng-model="environment.selectedType" ng-options="type.name for type in environment.availableTypes"></select>
     <h6>Interaction Threshold:</h6>

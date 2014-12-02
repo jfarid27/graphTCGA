@@ -157,16 +157,15 @@
                             $scope.environment.selectedFolder = {
                               name:"MicroArray",
                               files: [
-                                "BRCA_FinalNetwork.pairs"
+                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                               ]
                             }
-                            $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
+                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = 1
 
                             expected = {
-                                folder: "MicroArray",
-                                file: "BRCA_FinalNetwork.pairs",
+                                collection: "MABRCA",
                                 format: 'cytoscape',
                                 interactionThreshold: 1,
                                 zScoreThreshold: 1

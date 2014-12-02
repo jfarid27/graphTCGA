@@ -24,8 +24,7 @@
                     $scope.environment.zScoreThreshold){
 
                     var params = {
-                        folder: $scope.environment.selectedFolder.name,
-                        file: $scope.environment.selectedFile,
+                        collection: $scope.environment.selectedFile.collection,
                         format: "cytoscape",
                         interactionThreshold: $scope.environment.interactionThreshold,
                         zScoreThreshold: $scope.environment.zScoreThreshold
