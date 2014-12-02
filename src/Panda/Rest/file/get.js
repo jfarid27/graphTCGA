@@ -8,14 +8,13 @@ function getFile(controller){
 
       //unwrap request
       var params = {
-          folder: request.param('folder'),
-          file: request.param('file'),
+          collection: request.param('collection'),
           zScoreThreshold: request.param('zScoreThreshold'),
           interactionThreshold: request.param('interactionThreshold'),
           format: request.param('format')
       }
 
-      if (!params.folder || !params.file || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
+      if ( !params.collection || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
           var message= "Error: Missing request params!"
           response.status(501).json({error: message})
           return
@@ -24,12 +23,14 @@ function getFile(controller){
       var resWrapperJson = function(data) {
         response.type('json')
         response.send(data)
+        response.end()
       }
 
 
       var resWrapperTsv = function(data){
         response.type('tsv')
         response.send(data)
+        response.end()
       }
 
       var resErrWrapper = function(msg) {
