@@ -33,7 +33,21 @@ function DBConnectionEmitter(dburl, dbClient){
                     return
                 }
 
-                var query = {zScore:{$gt:+params.zScoreThreshold}}
+                var query = {
+                    interaction:{$gte:1},
+                    $or:[
+                        {
+                            "zScore":{
+                                $gt:+params.zScoreThreshold
+                            }
+                        },
+                        {
+                            "zScore":{
+                                $lt:-params.zScoreThreshold
+                            }
+                        }
+                    ]
+                }
 
                 var cursorStream = collection.find(query, {_id:0}).stream()
 
@@ -56,8 +70,33 @@ function DBConnectionEmitter(dburl, dbClient){
 }
 util.inherits(DBConnectionEmitter, events.EventEmitter)
 
-exports.get = function(dburl, dbClient){
-    return new DBConnectionEmitter(dburl, dbClient)
+exports.partial = function(){
+
+    var dburl, dbClient
+
+    function exports(){
+        return new DBConnectionEmitter(dburl, dbClient)
+    }
+
+    exports.url = function(connectionUrl){
+        if(arguments.length > 0){
+            dburl = connectionUrl
+            return this
+        }
+
+        return dburl
+    }
+
+    exports.dbClient = function(client){
+        if(arguments.length > 0){
+            dbClient = client
+            return this
+        }
+
+        return dbClient
+    }
+
+    return exports
 }
 
 exports.construct = DBConnectionEmitter

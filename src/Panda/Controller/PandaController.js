@@ -14,6 +14,7 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
         })
 
         dbConnectionEmitter.on('close', function(){
+
             var data = dbParseModule.parse(self.buffer, params)
             self.emit('data', data)
             self.emit('close')
@@ -35,6 +36,42 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
 util.inherits(PandaController, events.EventEmitter)
 
 exports.construct = PandaController
-exports.get = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
-  return new PandaController(folderStructureEmitter, dbConnectionEmitter, dbParseModule);
+exports.partial = function(){
+
+    var folderStructureEmitter, dbConnectionEmitter, dbParseModule
+
+    function exports(){
+        //Here dbConnectionEmitter is partial and must be instantiated
+        var dbConnection = dbConnectionEmitter()
+        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule);
+    }
+
+    exports.folderStruct = function(folderEmitter){
+        if (arguments.length > 0){
+            folderStructureEmitter = folderEmitter
+            return this
+        }
+
+        return folderStructureEmitter
+    }
+
+    exports.dbConn = function(dbEmitter){
+        if (arguments.length > 0){
+            dbConnectionEmitter = dbEmitter
+            return this
+        }
+
+        return dbConnectionEmitter
+    }
+
+    exports.dbParser = function(parser){
+        if (arguments.length > 0){
+            dbParseModule = parser
+            return this
+        }
+
+        return dbParseModule
+    }
+
+    return exports
 }
