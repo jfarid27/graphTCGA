@@ -8,9 +8,31 @@ var dbParse = function(){
             return self.parseJson(arr)
         } else if (params.format == 'cytoscape'){
             return self.parseCytoscape(arr)
-        } else {
-            return undefined
+        } else if (params.format == 'tsv') {
+            return self.parseTsv(arr)
+        } else if (params.format == 'gephi') {
+            return self.parseGephi(arr)
         }
+    }
+
+    self.parseGephi = function(arr){
+        var header = "source\ttarget\tinteraction\tzScore\n"
+
+        var data = self.parseTsv(arr)
+
+        return header.concat(data)
+    }
+
+    self.parseTsv = function(arr){
+        var str = ""
+
+        for (edge in arr){
+            var e = arr[edge]
+
+            str = str.concat(e.source +"\t"+e.target+"\t"+e.interaction+"\t"+e.zScore+"\n")
+        }
+
+        return str
     }
 
     self.parseJson = function(arr){
