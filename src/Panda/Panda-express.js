@@ -5,11 +5,21 @@ var fs = require('fs'),
     folderStructParseEmitter = require('./Modules/folderStructParseEmitter.js')
         .get(fileStructure),
     dbParser = require('./Modules/dbParse.js').get(),
-    pandaController = require('./Controller/PandaController.js'),
-    dbConnectionEmitter = require('./Modules/DBConnectionEmitter.js')
+    PandaController = require('./Controller/PandaController.js').partial(),
+    dbConnectionEmitter = require('./Modules/DBConnectionEmitter.js').partial()
 
 var pandaExpress = function(app, dbUrl) {
-    pandaRest(app, pandaController, folderStructParseEmitter, dbConnectionEmitter, dbParser, dbUrl, mongoClient)
+
+    dbConnectionEmitter
+        .url(dbUrl)
+        .dbClient(mongoClient)
+
+    PandaController
+        .folderStruct(folderStructParseEmitter)
+        .dbConn(dbConnectionEmitter)
+        .dbParser(dbParser)
+
+    pandaRest(app, PandaController)
 }
 
 exports.addRoutesTo = pandaExpress

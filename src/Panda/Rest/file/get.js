@@ -1,9 +1,7 @@
-function getFile(Controller, folderStructParseEmitter, DBConnectionEmitter, dbParser, dbUrl, mongoClient){
+function getFile(Controller){
     return function(request, response){
 
-        var dbConnectionEmitter = DBConnectionEmitter.get(dbUrl, mongoClient)
-
-        var controller = Controller.get(folderStructParseEmitter, dbConnectionEmitter, dbParser)
+        var controller = Controller()
 
         if (!request.params) {
             response.status(501).send({error: "Error: No request params set!"})
@@ -12,10 +10,11 @@ function getFile(Controller, folderStructParseEmitter, DBConnectionEmitter, dbPa
 
         //unwrap request
         var params = {
-          collection: request.param('collection'),
-          zScoreThreshold: request.param('zScoreThreshold'),
-          interactionThreshold: request.param('interactionThreshold'),
-          format: request.param('format')
+            collection: request.param('collection'),
+            zScoreThreshold: request.param('zScoreThreshold'),
+            interactionThreshold: request.param('interactionThreshold'),
+            format: request.param('format'),
+            file: request.param('file')
         }
 
         if ( !params.collection || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
@@ -24,33 +23,37 @@ function getFile(Controller, folderStructParseEmitter, DBConnectionEmitter, dbPa
           return
         }
 
-        var resWrapperJson = function(data) {
-            response.send(data)
-            response.end()
-        }
-
-
-        var resWrapperTsv = function(data){
-            response.send(data)
-            response.end()
-        }
-
         var resErrWrapper = function(msg) {
             response.status(501)
                 .json({error:"Failed on file get", message: msg})
+
+            response.end()
+        }
+
+        if (params.file){
+            response.set({
+                'Content-Disposition': 'attachment; filename=download.txt'
+            })
+        }
+        if (params.format =='json' ||params.format == 'cytoscape'){
+            response.set('Content-Type', 'application/json')
+        } else {
+            response.set({
+                'Content-Type': 'text/tab-separated-values',
+            })
+
         }
 
         controller.on('error', function(error){
             resErrWrapper(error.msg)
         })
 
-        if(params.format == 'json' || params.format == 'cytoscape'){
-            controller.on('data', resWrapperJson)
-            controller.emit('getFile', params)
-        } else if (params.format == 'tsv') {
-            controller.on('data', resWrapperTsv)
-            controller.emit('getFile', params)
-        }
+        controller.on('data', function(data){
+            response.send(data)
+            response.end()
+        })
+
+        controller.emit('getFile', params)
     }
 }
 

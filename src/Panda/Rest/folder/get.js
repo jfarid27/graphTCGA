@@ -1,10 +1,8 @@
-function getFolder(Controller, folderStructParseEmitter, DBConnectionEmitter, dbParser, dbUrl, mongoClient) {
+function getFolder(Controller) {
 
     return function (request, response) {
 
-        var dbConnectionEmitter = DBConnectionEmitter.get(dbUrl, mongoClient)
-
-        var controller = Controller.get(folderStructParseEmitter, dbConnectionEmitter, dbParser)
+        var controller = Controller()
 
         if (!request.params) {
             response.status(501).send({
