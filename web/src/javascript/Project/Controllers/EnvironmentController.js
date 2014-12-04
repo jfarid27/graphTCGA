@@ -19,15 +19,13 @@
 
             $scope.$on('visualizeGraph', function(event){
                 if ($scope.environment.selectedFolder &&
-                    $scope.environment.selectedFile &&
-                    $scope.environment.interactionThreshold &&
-                    $scope.environment.zScoreThreshold){
+                    $scope.environment.selectedFile){
 
                     var params = {
                         collection: $scope.environment.selectedFile.collection,
                         format: "cytoscape",
-                        interactionThreshold: $scope.environment.interactionThreshold,
-                        zScoreThreshold: $scope.environment.zScoreThreshold
+                        interactionThreshold: 1,
+                        zScoreThreshold: 5
                     }
 
                     Api.getFile(params).$promise.then(function(data){
@@ -44,11 +42,11 @@
                     $scope.environment.zScoreThreshold){
 
                     var params = {
-                        folder: $scope.environment.selectedFolder.name,
-                        file: $scope.environment.selectedFile,
+                        collection: $scope.environment.selectedFile.collection,
                         format: $scope.environment.selectedType.value,
                         interactionThreshold: $scope.environment.interactionThreshold,
-                        zScoreThreshold: $scope.environment.zScoreThreshold
+                        zScoreThreshold: $scope.environment.zScoreThreshold,
+                        file: true
                     }
                     Api.getFile(params)
                 }
