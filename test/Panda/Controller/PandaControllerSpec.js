@@ -95,16 +95,26 @@ describe('PandaController', function(){
 
         describe('on DBConnection close event', function(){
 
-            it('should call success with dbParse on buffered result', function(done){
+            var result
 
-                var successCurry = function(data){
+            afterEach(function(){
+                result = undefined
+            })
+
+            it('should emit data event with parsed data', function(done){
+
+                Controller.on('data', function(data){
                     data.should.eql('foo')
-                    done()
-                }
+                })
 
-                Controller.emit('getFile', {data:'foo'}, successCurry)
+                Controller.on('close', function(){
+                    done()
+                })
+
+                Controller.emit('getFile', {data:'foo'})
 
                 mockDBConnectionEmitter.emit('close')
+
 
             })
         })

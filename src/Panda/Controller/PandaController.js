@@ -2,14 +2,12 @@ var events = require('events'),
   util = require('util')
 
 var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
-    
     var self = this;
     events.EventEmitter.call(self);
 
-
     self.buffer = []
 
-    self.on('getFile', function(params, success, error){
+    self.on('getFile', function(params){
 
         dbConnectionEmitter.on('data', function(data){
             self.buffer.push(data)
@@ -17,7 +15,8 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
 
         dbConnectionEmitter.on('close', function(){
             var data = dbParseModule.parse(self.buffer, params)
-            success(data)
+            self.emit('data', data)
+            self.emit('close')
         })
 
         dbConnectionEmitter.on('error', function(){
@@ -36,6 +35,6 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
 util.inherits(PandaController, events.EventEmitter)
 
 exports.construct = PandaController
-exports.get = function(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges){
-  return new PandaController(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges);
+exports.get = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
+  return new PandaController(folderStructureEmitter, dbConnectionEmitter, dbParseModule);
 }
