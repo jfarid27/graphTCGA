@@ -19,16 +19,14 @@
 
             $scope.$on('visualizeGraph', function(event){
                 if ($scope.environment.selectedFolder &&
-                    $scope.environment.selectedFile &&
-                    $scope.environment.interactionThreshold &&
-                    $scope.environment.zScoreThreshold){
+                    $scope.environment.selectedFile){
 
                     var params = {
-                        folder: $scope.environment.selectedFolder.name,
-                        file: $scope.environment.selectedFile,
+                        collection: $scope.environment.selectedFile.collection,
                         format: "cytoscape",
-                        interactionThreshold: $scope.environment.interactionThreshold,
-                        zScoreThreshold: $scope.environment.zScoreThreshold
+                        interactionThreshold: 1,
+                        zScoreThresholdMin: -5.5,
+                        zScoreThresholdMax: 5.5
                     }
 
                     Api.getFile(params).$promise.then(function(data){
@@ -42,14 +40,16 @@
                     $scope.environment.selectedFile &&
                     $scope.environment.selectedType &&
                     $scope.environment.interactionThreshold &&
-                    $scope.environment.zScoreThreshold){
+                    $scope.environment.zScoreThreshold.max &&
+                    $scope.environment.zScoreThreshold.min){
 
                     var params = {
-                        folder: $scope.environment.selectedFolder.name,
-                        file: $scope.environment.selectedFile,
+                        collection: $scope.environment.selectedFile.collection,
                         format: $scope.environment.selectedType.value,
                         interactionThreshold: $scope.environment.interactionThreshold,
-                        zScoreThreshold: $scope.environment.zScoreThreshold
+                        zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
+                        zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
+                        file: true
                     }
                     Api.getFile(params)
                 }

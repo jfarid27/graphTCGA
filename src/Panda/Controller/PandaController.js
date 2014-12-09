@@ -1,52 +1,77 @@
 var events = require('events'),
   util = require('util')
 
-var PandaController = function(folderStructureEmitter, fileReaderEmitter, bufferToGraph){
-    
+var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
     var self = this;
     events.EventEmitter.call(self);
 
-    self.on('getFile', function(params, success, error){
+    self.buffer = []
 
-        var successCurry = function(buffer, params){
-            self.emit('parseBuffer', buffer, params, success, error)
-            return
-        }
+    self.on('getFile', function(params){
 
-        fileReaderEmitter.emit('getFile', params, successCurry, error)
+        dbConnectionEmitter.on('data', function(data){
+            self.buffer.push(data)
+        })
+
+        dbConnectionEmitter.on('close', function(){
+
+            var data = dbParseModule.parse(self.buffer, params)
+            self.emit('data', data)
+            self.emit('close')
+        })
+
+        dbConnectionEmitter.on('error', function(){
+            self.emit('error', {msg: "PandaController Error: dbConnection emitted error"})
+        })
+
+        dbConnectionEmitter.emit('getFile', params)
+
     })
 
     self.on('getFolders', function(params, success, error){
         folderStructureEmitter.emit('getFolders', params, success, error)
     })
 
-    self.on('getListFiles', function(params, success, error){
-        folderStructureEmitter.emit('getListFiles', params, success, error)
-    })
-
-    self.on('parseBuffer', function(buffer, params, success, error){
-
-        var data = bufferToGraph.bufferToLines(buffer, params)
-
-        if (params.format == 'tsv'){
-            success(bufferToGraph.arrayToTsv(data))
-        } else if (params.format == 'json'){
-            success(bufferToGraph.arrayToJson(data))
-        } else if (params.format == 'gephi') {
-            success(bufferToGraph.arrayToGephi(data))
-        } else if (params.format == 'cytoscape') {
-            success(bufferToGraph.arrayToCytoscape(data))
-        } else {
-            error("Error on buffer parsing")
-        }
-
-    })
-
-
 }
 util.inherits(PandaController, events.EventEmitter)
 
 exports.construct = PandaController
-exports.get = function(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges){
-  return new PandaController(folderStructureEmitter, fileReaderEmitter, bufferToGraphEdges);
+exports.partial = function(){
+
+    var folderStructureEmitter, dbConnectionEmitter, dbParseModule
+
+    function exports(){
+        //Here dbConnectionEmitter is partial and must be instantiated
+        var dbConnection = dbConnectionEmitter()
+        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule);
+    }
+
+    exports.folderStruct = function(folderEmitter){
+        if (arguments.length > 0){
+            folderStructureEmitter = folderEmitter
+            return this
+        }
+
+        return folderStructureEmitter
+    }
+
+    exports.dbConn = function(dbEmitter){
+        if (arguments.length > 0){
+            dbConnectionEmitter = dbEmitter
+            return this
+        }
+
+        return dbConnectionEmitter
+    }
+
+    exports.dbParser = function(parser){
+        if (arguments.length > 0){
+            dbParseModule = parser
+            return this
+        }
+
+        return dbParseModule
+    }
+
+    return exports
 }

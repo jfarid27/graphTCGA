@@ -4,10 +4,11 @@
         './Directives/graphVisualization',
         './Directives/environmentInterface',
         './Directives/appHeader',
-        './Directives/aboutSection'
+        './Directives/aboutSection',
+        './Directives/histogramVisualization'
     ]
 
-    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection){
+    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection, addHistogramVisualization){
 
         return function(module){
 
@@ -15,6 +16,7 @@
             addEnvironmentInterface(module)
             addAppHeader(module)
             addAboutSection(module)
+            addHistogramVisualization(module)
 
         }
 

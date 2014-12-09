@@ -157,19 +157,19 @@
                             $scope.environment.selectedFolder = {
                               name:"MicroArray",
                               files: [
-                                "BRCA_FinalNetwork.pairs"
+                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                               ]
                             }
-                            $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
+                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                             $scope.environment.interactionThreshold = 1
-                            $scope.environment.zScoreThreshold = 1
+                            $scope.environment.zScoreThreshold = {min:3, max: 12}
 
                             expected = {
-                                folder: "MicroArray",
-                                file: "BRCA_FinalNetwork.pairs",
+                                collection: "MABRCA",
                                 format: 'cytoscape',
                                 interactionThreshold: 1,
-                                zScoreThreshold: 1
+                                zScoreThresholdMax: 5.5,
+                                zScoreThresholdMin: -5.5
                             }
 
                             $scope.$emit('visualizeGraph')
@@ -199,20 +199,24 @@
                             $scope.environment.selectedFolder = {
                               name:"MicroArray",
                               files: [
-                                "BRCA_FinalNetwork.pairs"
+                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                               ]
                             }
-                            $scope.environment.selectedFile = "BRCA_FinalNetwork.pairs"
+                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
                             $scope.environment.selectedType = {name:'.JSON', value:'json'}
                             $scope.environment.interactionThreshold = 1
-                            $scope.environment.zScoreThreshold = 1
+                            $scope.environment.zScoreThreshold = {
+                                min: -5.5,
+                                max: 5.5
+                            }
 
                             expected = {
-                                folder: "MicroArray",
-                                file: "BRCA_FinalNetwork.pairs",
+                                collection:"MABRCA",
+                                file: true,
                                 format: 'json',
                                 interactionThreshold: 1,
-                                zScoreThreshold: 1
+                                zScoreThresholdMin: -5.5,
+                                zScoreThresholdMax: 5.5
                             }
 
                             $scope.$emit('downloadGraph')

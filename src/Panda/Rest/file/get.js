@@ -1,55 +1,59 @@
-function getFile(controller){
+function getFile(Controller){
     return function(request, response){
 
-      if (!request.params) {
-        response.status(501).send({error: "Error: No request params set!"})
-        return
-      }
+        var controller = Controller()
 
-      //unwrap request
-      var params = {
-          folder: request.param('folder'),
-          file: request.param('file'),
-          zScoreThreshold: request.param('zScoreThreshold'),
-          interactionThreshold: request.param('interactionThreshold'),
-          format: request.param('format')
-      }
+        if (!request.params) {
+            response.status(501).send({error: "Error: No request params set!"})
+            return
+        }
 
-      if (!params.folder || !params.file || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
+        //unwrap request
+        var params = {
+            collection: request.param('collection'),
+            zScoreThresholdMax: parseFloat(request.param('zScoreThresholdMax')),
+            zScoreThresholdMin: parseFloat(request.param('zScoreThresholdMin')),
+            interactionThreshold: parseFloat(request.param('interactionThreshold')),
+            format: request.param('format'),
+            file: request.param('file')
+        }
+
+        if ( !params.collection || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null || !params.interactionThreshold || !params.format){
           var message= "Error: Missing request params!"
           response.status(501).json({error: message})
           return
-      }
+        }
 
-      var resWrapperJson = function(data) {
-        response.type('json')
-        response.send(data)
-      }
+        var resErrWrapper = function(msg) {
+            response.status(501)
+                .json({error:"Failed on file get", message: msg})
 
+            response.end()
+        }
 
-      var resWrapperTsv = function(data){
-        response.type('tsv')
-        response.send(data)
-      }
+        if (params.format =='json' ||params.format == 'cytoscape'){
+            response.set('Content-Type', 'application/json')
+        } else if (params.format == 'tsv') {
+            response.set({
+                'Content-Type': 'text/tab-separated-values',
+            })
 
-      var resErrWrapper = function(msg) {
-        response.status(501)
-        .json({error:"Failed on file get", message: msg})
-      }
+        }
 
-      if(params.format == 'json' || params.format == 'cytoscape'){
-          controller.emit('getFile', params, resWrapperJson, resErrWrapper)
-      } else if (params.format = 'tsv' || params.format == 'gephi') {
-          controller.emit('getFile', params, resWrapperTsv, resErrWrapper)
+        controller.on('error', function(error){
+            resErrWrapper(error.msg)
+        })
 
-      }
+        controller.on('data', function(data){
+            response.send(data)
+            response.end()
+        })
 
-
-
+        controller.emit('getFile', params)
     }
 }
 
 exports.construct = getFile
-exports.get = function(controller){
-    return new getFile(controller)
+exports.get = function(controller, folderStructParseEmitter, dbConnectionEmitter, dbParser, dbUrl, mongoClient){
+    return new getFile(controller, folderStructParseEmitter, dbConnectionEmitter, dbParser, dbUrl, mongoClient)
 }
