@@ -138,7 +138,7 @@ describe('DBConnectionEmitter', function () {
                         done()
                     })
 
-                    DBConnection.emit('getFile', {zScoreThreshold: 2 , collection:"bar"})
+                    DBConnection.emit('getFile', {zScoreThresholdMin: 2, zScoreThresholdMax: 2, collection:"bar"})
                 })
             })
 
@@ -154,7 +154,7 @@ describe('DBConnectionEmitter', function () {
 
                 it('should query database using getfile params', function(){
 
-                    DBConnection.emit('getFile', {zScoreThreshold: 2, collection:"bar"})
+                    DBConnection.emit('getFile', {zScoreThresholdMin: 2, zScoreThresholdMax: 2, collection:"bar"})
                     mockResolvedQuery.$resolved.should.eql(true)
                 })
 
@@ -170,7 +170,7 @@ describe('DBConnectionEmitter', function () {
                             done()
                         })
 
-                        DBConnection.emit('getFile', {zScoreThreshold: 2, collection:"bar"})
+                        DBConnection.emit('getFile', {zScoreThresholdMin: 2, zScoreThresholdMax: 2, collection:"bar"})
 
                         mockCursorStream.emit('data', 'foo')
 
@@ -185,7 +185,7 @@ describe('DBConnectionEmitter', function () {
                             done()
                         })
 
-                        DBConnection.emit('getFile', {zScoreThreshold: 2, collection:"bar"})
+                        DBConnection.emit('getFile', {zScoreThresholdMin: 2, zScoreThresholdMax: 2, collection:"bar"})
 
                         mockCursorStream.emit('close')
                     })
@@ -198,7 +198,7 @@ describe('DBConnectionEmitter', function () {
                             done()
                         })
 
-                        DBConnection.emit('getFile', {zScoreThreshold: 2, collection:"bar"})
+                        DBConnection.emit('getFile', {zScoreThresholdMin: 2, zScoreThresholdMax: 2, collection:"bar"})
 
                         mockCursorStream.emit('close')
 

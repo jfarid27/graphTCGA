@@ -10,7 +10,7 @@ function DBConnectionEmitter(dburl, dbClient){
 
     self.on('getFile', function(params){
 
-        if (!params || !params.collection || !params.zScoreThreshold){
+        if (!params || !params.collection || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null){
 
             self.emit('error', {msg: "DBConnectionEmitter Error: Missing getFile params"})
             return
@@ -34,16 +34,16 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
-                    interaction:{$gte:1},
+                    interaction:{$gte:params.interactionThreshold},
                     $or:[
                         {
                             "zScore":{
-                                $gt:+params.zScoreThreshold
+                                $gt:params.zScoreThresholdMax
                             }
                         },
                         {
                             "zScore":{
-                                $lt:-params.zScoreThreshold
+                                $lt:params.zScoreThresholdMin
                             }
                         }
                     ]

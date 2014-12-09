@@ -11,13 +11,14 @@ function getFile(Controller){
         //unwrap request
         var params = {
             collection: request.param('collection'),
-            zScoreThreshold: request.param('zScoreThreshold'),
-            interactionThreshold: request.param('interactionThreshold'),
+            zScoreThresholdMax: parseFloat(request.param('zScoreThresholdMax')),
+            zScoreThresholdMin: parseFloat(request.param('zScoreThresholdMin')),
+            interactionThreshold: parseFloat(request.param('interactionThreshold')),
             format: request.param('format'),
             file: request.param('file')
         }
 
-        if ( !params.collection || !params.zScoreThreshold || !params.interactionThreshold || !params.format){
+        if ( !params.collection || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null || !params.interactionThreshold || !params.format){
           var message= "Error: Missing request params!"
           response.status(501).json({error: message})
           return
@@ -30,14 +31,9 @@ function getFile(Controller){
             response.end()
         }
 
-        if (params.file){
-            response.set({
-                'Content-Disposition': 'attachment; filename=download.txt'
-            })
-        }
         if (params.format =='json' ||params.format == 'cytoscape'){
             response.set('Content-Type', 'application/json')
-        } else {
+        } else if (params.format == 'tsv') {
             response.set({
                 'Content-Type': 'text/tab-separated-values',
             })
