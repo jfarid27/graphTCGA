@@ -4,18 +4,26 @@ exports.folders = [
     name:"MicroArray",
     files: [
         {
-            name:"BRCA_FinalNetwork.pairs",
+            name:"BRCA",
             collection:"MABRCA"
-        }
-    ]
-  },
-  {
-    name:"RNASeq",
-    files: [
+        },
         {
-            name:"BRCA_FinalNetwork.pairs",
-            collection:"MABRCA"
+            name:"COAD",
+            collection:"MACOAD"
+        },
+        {
+            name:"GBM",
+            collection:"MAGBM"
+        },
+        {
+            name:"KIRC",
+            collection:"MAKIRC"
+        },
+        {
+            name:"KIRP",
+            collection:"MAKIRP"
         }
+
     ]
-  },
+  }
 ]
