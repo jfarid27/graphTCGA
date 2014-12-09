@@ -25,7 +25,8 @@
                         collection: $scope.environment.selectedFile.collection,
                         format: "cytoscape",
                         interactionThreshold: 1,
-                        zScoreThreshold: 5
+                        zScoreThresholdMin: -5.5,
+                        zScoreThresholdMax: 5.5
                     }
 
                     Api.getFile(params).$promise.then(function(data){
@@ -39,13 +40,15 @@
                     $scope.environment.selectedFile &&
                     $scope.environment.selectedType &&
                     $scope.environment.interactionThreshold &&
-                    $scope.environment.zScoreThreshold){
+                    $scope.environment.zScoreThreshold.max &&
+                    $scope.environment.zScoreThreshold.min){
 
                     var params = {
                         collection: $scope.environment.selectedFile.collection,
                         format: $scope.environment.selectedType.value,
                         interactionThreshold: $scope.environment.interactionThreshold,
-                        zScoreThreshold: $scope.environment.zScoreThreshold,
+                        zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
+                        zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
                         file: true
                     }
                     Api.getFile(params)
