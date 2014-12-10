@@ -19,8 +19,8 @@
             self.availableFiles = undefined
             self.interactionThreshold = undefined
             self.zScoreThreshold = {
-                max: 4,
-                min: -4
+                max: 1,
+                min: -1
             }
             self.graph = undefined
         }
