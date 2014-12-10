@@ -2,7 +2,7 @@
 
     define([], function(){
 
-        return function($scope, Environment, Api){
+        return function($scope, Environment, Api , $window){
 
             $scope.environment = Environment
 
@@ -39,19 +39,24 @@
                 if ($scope.environment.selectedFolder &&
                     $scope.environment.selectedFile &&
                     $scope.environment.selectedType &&
-                    $scope.environment.interactionThreshold &&
                     $scope.environment.zScoreThreshold.max &&
                     $scope.environment.zScoreThreshold.min){
 
                     var params = {
                         collection: $scope.environment.selectedFile.collection,
                         format: $scope.environment.selectedType.value,
-                        interactionThreshold: $scope.environment.interactionThreshold,
+                        interactionThreshold: 1,
                         zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
                         zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
                         file: true
                     }
                     Api.getFile(params)
+                    var string = "collection=" + params.collection
+                    + "&file=true&format=tsv&interactionThreshold=1&zScoreThresholdMax="
+                    + params.zScoreThresholdMax + "&zScoreThresholdMin="
+                    + params.zScoreThresholdMin
+
+                    $window.open('/file?' + string)
                 }
             })
 

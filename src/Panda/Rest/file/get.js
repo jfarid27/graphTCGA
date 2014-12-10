@@ -38,6 +38,8 @@ function getFile(Controller){
                 'Content-Type': 'text/tab-separated-values',
             })
 
+            response.attachment('file.tsv')
+
         }
 
         controller.on('error', function(error){

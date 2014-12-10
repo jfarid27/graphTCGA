@@ -7,8 +7,7 @@
     <select ng-model="environment.selectedFile" ng-options="file.name for file in environment.availableFiles"></select>
     <h5>File Format:</h5>
     <select ng-model="environment.selectedType" ng-options="type.name for type in environment.availableTypes"></select>
-    <h5>Interaction Threshold:</h5>
-    <input type="text" ng-model="environment.interactionThreshold" required>
+
     <h5>Z-Score Threshold:</h5>
     <p>Maximum Bound: {{environment.zScoreThreshold.max}}</p>
     <p>Minimum Bound: {{environment.zScoreThreshold.min}}</p>
