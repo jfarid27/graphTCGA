@@ -9,8 +9,8 @@
                 width: 220,
                 height: 100,
                 margin: {
-                    top: 10,
-                    bottom: 40,
+                    top: 30,
+                    bottom: 60,
                     left: 10,
                     right: 60
                 }
@@ -24,8 +24,22 @@
 
             function exports(_selection){
 
+                _selection.append('defs')
+                  .append('pattern')
+                    .attr('id', 'diagonalHatch')
+                    .attr('patternUnits', 'userSpaceOnUse')
+                    .attr('width', 4)
+                    .attr('height', 4)
+                  .append('path')
+                    .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
+                    .attr('stroke', '#af1212')
+                    .attr('stroke-width', 1);
+
                 var histogram = _selection.append('g')
                     .classed('histogram', true)
+
+                var legend = _selection.append('g')
+                    .classed('legend', true)
 
                 var bars = histogram.append('g').classed('bar-group', true)
 
@@ -48,7 +62,7 @@
                     .attr('height', function(d){return params.margin.top + params.height - yScale(d.y)})
                     .attr('x', function(d, i){return xScale(d.x)})
                     .attr('y',  function(d,i){return yScale(d.y)})
-                    .attr('fill', 'red')
+                    .attr('fill', '#0058ff')
 
                 histogram.append("g")
                     .attr("class", "x axis")
@@ -62,7 +76,7 @@
 
                 brush = d3.svg.brush()
                     .x(xScale)
-                    .extent([-4, 4])
+                    .extent([-1, 1])
                     .on("brush", function(){
                         dispatch.brushing(brush)
                     });
@@ -72,7 +86,25 @@
                     .call(brush);
 
                 gBrush.selectAll("rect")
-                    .attr("height", params.height + params.margin.top);
+                    .attr("height", params.height+3)
+                    .attr('y', params.margin.top -3)
+                    .attr('fill', 'url(#diagonalHatch)');
+
+
+                legend.append('rect')
+                    .attr('height', 15)
+                    .attr('width', 15)
+                    .attr('x', params.width)
+                    .attr('y', 0)
+                    .attr('fill', 'url(#diagonalHatch)');
+
+                legend.append('text')
+                    .attr('x', params.width - 105)
+                    .attr('y', 13)
+                    .text( "Range (Excluded) - ")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "12px")
+                    .attr("fill", "black");
 
 
             }
