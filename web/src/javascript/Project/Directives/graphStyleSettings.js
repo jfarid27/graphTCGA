@@ -6,7 +6,7 @@
             {
                 selector: 'node',
                 css: {
-                    'background-color': '#001fa2',
+                    'background-color': '#000aff',
                     'content': 'data(id)',
                     'color': 'black',
                     'width':45,
@@ -18,10 +18,10 @@
                 selector: 'edge',
                 css: {
                     'target-arrow-shape': 'triangle',
-                    'line-color': '#000000',
+                    'line-color': '#ffc400',
                     'target-arrow-fill':'filled',
                     'width':13,
-                    'target-arrow-color': '#000',
+                    'target-arrow-color': '#ffc400',
                 }
             },
             {

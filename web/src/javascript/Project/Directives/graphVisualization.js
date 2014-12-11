@@ -26,6 +26,7 @@
                                     pan: { x:0, y:0},
                                     minZoom: 1e-50,
                                     maxZoom: 1e50,
+                                    boxSelectionEnabled: false,
                                     zoomingEnabled: true,
                                     userZoomingEnabled: true,
                                     panningEnabled: true,
