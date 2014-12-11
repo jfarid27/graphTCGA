@@ -5,7 +5,7 @@
     define(deps, function(EnvironmentController){
 
         describe('EnvironmentController', function(){
-            var $scope, scopeConstr, Api, Environment
+            var $scope, scopeConstr, Api, Environment, mockWindow
 
             beforeEach(function(){
 
@@ -27,6 +27,12 @@
                 }
 
                 $scope = new scopeConstr()
+
+                mockWindow = {
+                    open: function(){
+                        return
+                    }
+                }
 
                 Api = {
                     getFile: function(params){
@@ -87,7 +93,7 @@
 
                 spyOn(Api, 'getFolder').and.callThrough()
 
-                EnvironmentController($scope, new Environment, Api)
+                EnvironmentController($scope, new Environment, Api, mockWindow)
 
 
             })

@@ -8,7 +8,7 @@
 
         return function(module){
             module
-            .controller('EnvironmentController', ['$scope', 'Project.Environment', 'Project.Api', EnvironmentController])
+            .controller('EnvironmentController', ['$scope', 'Project.Environment', 'Project.Api', '$window', EnvironmentController])
         }
 
     })

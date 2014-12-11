@@ -6,24 +6,28 @@
             {
                 selector: 'node',
                 css: {
-                    'background-color': 'red',
+                    'background-color': '#000aff',
                     'content': 'data(id)',
-                    'color': 'black'
+                    'color': 'black',
+                    'width':45,
+                    'height':45,
+                    'font-size': 57
                 }
             },
             {
                 selector: 'edge',
                 css: {
                     'target-arrow-shape': 'triangle',
-                    'line-color': 'grey'
+                    'line-color': '#ffc400',
+                    'target-arrow-fill':'filled',
+                    'width':13,
+                    'target-arrow-color': '#ffc400',
                 }
             },
             {
-                selector: 'edge-arrow',
+                selector: 'graph-background',
                 css: {
-                    'target-arrow-shape': 'triangle',
-                    'target-arrow-color': 'grey',
-                    'line-color': 'grey'
+                    'overlay-color': 'green'
                 }
             }
         ]
