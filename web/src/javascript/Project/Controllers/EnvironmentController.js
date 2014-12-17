@@ -2,7 +2,7 @@
 
     define([], function(){
 
-        return function($scope, Environment, Api , $window){
+        return function($scope, Environment, Api , $window, library){
 
             $scope.environment = Environment
 
@@ -14,6 +14,17 @@
             $scope.$watch('environment.selectedFolder', function(newval, oldval){
                 if (newval){
                     $scope.environment.availableFiles = $scope.environment.selectedFolder.files
+                }
+            })
+
+            $scope.$watch('environment.searchTerm', function(newval, oldval){
+                if (newval == ""){
+                    $scope.environment.matchingTerms = []
+                    return
+                }
+
+                if (newval) {
+                    $scope.environment.matchingTerms = library.search(newval, -65)
                 }
             })
 
