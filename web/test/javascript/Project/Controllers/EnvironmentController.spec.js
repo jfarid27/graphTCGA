@@ -162,7 +162,7 @@
                             })
 
                             it('should call to search library using term',function(){
-                                expect(mockLibrary.search).toHaveBeenCalledWith('Blah', -65)
+                                expect(mockLibrary.search).toHaveBeenCalledWith('Blah', -80)
                             })
                             it('should bind matching terms to environment.matchingTerms', function(){
                                 expect($scope.environment.matchingTerms).toContain('foo')

@@ -18,13 +18,13 @@
             })
 
             $scope.$watch('environment.searchTerm', function(newval, oldval){
-                if (newval == ""){
+                if (newval == "" || typeof newval == 'undefined'){
                     $scope.environment.matchingTerms = []
                     return
                 }
 
-                if (newval) {
-                    $scope.environment.matchingTerms = library.search(newval, -65)
+                if (newval.length > 2) {
+                    $scope.environment.matchingTerms = library.search(newval, -80)
                 }
             })
 
