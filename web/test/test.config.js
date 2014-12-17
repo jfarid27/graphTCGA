@@ -18,13 +18,11 @@ require.config({
     'baseUrl': '/base',
 
     'paths': {
-        'bower': 'bower_components/',
-        'web_js': 'web/src/javascript/',
         'angular': 'bower_components/angular/angular',
         'angularMocks': 'node_modules/angular-mocks/angular-mocks',
         'jquery': '',
         'd3': 'bower_components/d3/d3',
-        'grammer': 'node_modules/grammer/src/javascript/grammer'
+        'grammer': 'bower_components/grammer/src/javascript/grammer'
     },
 
     'shim': {
