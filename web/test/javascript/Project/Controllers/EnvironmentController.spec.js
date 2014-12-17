@@ -5,7 +5,7 @@
     define(deps, function(EnvironmentController){
 
         describe('EnvironmentController', function(){
-            var $scope, scopeConstr, Api, Environment, mockWindow
+            var $scope, scopeConstr, Api, Environment, mockWindow, mockLibrary
 
             beforeEach(function(){
 
@@ -93,7 +93,14 @@
 
                 spyOn(Api, 'getFolder').and.callThrough()
 
-                EnvironmentController($scope, new Environment, Api, mockWindow)
+                mockLibrary = {
+                    'search': function(term){
+                        return ['foo', 'bar']
+                    }
+                }
+
+
+                EnvironmentController($scope, new Environment, Api, mockWindow, mockLibrary)
 
 
             })
@@ -126,6 +133,42 @@
                     it('should add available folders to scope', function(){
                         expect($scope.environment.availableFolders).toContain(expected[0])
                         expect($scope.environment.availableFolders).toContain(expected[1])
+                    })
+                })
+
+                describe('environment.searchTerm registered watcher', function(){
+                    describe('when fired', function(){
+
+                        describe('with empty string', function(){
+
+                            beforeEach(function(){
+
+                                spyOn(mockLibrary, 'search').and.callThrough()
+
+                                $scope.$registeredWatchers['environment.searchTerm']("")
+                            })
+
+                            it('should populate matching terms with an empty array', function(){
+                                expect($scope.environment.matchingTerms.length).toBe(0)
+                            })
+                        })
+
+                        describe('with a search string', function(){
+                            beforeEach(function(){
+
+                                spyOn(mockLibrary, 'search').and.callThrough()
+
+                                $scope.$registeredWatchers['environment.searchTerm']("Blah")
+                            })
+
+                            it('should call to search library using term',function(){
+                                expect(mockLibrary.search).toHaveBeenCalledWith('Blah', -65)
+                            })
+                            it('should bind matching terms to environment.matchingTerms', function(){
+                                expect($scope.environment.matchingTerms).toContain('foo')
+                                expect($scope.environment.matchingTerms).toContain('bar')
+                            })
+                        })
                     })
                 })
 
