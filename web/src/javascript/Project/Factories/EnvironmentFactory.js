@@ -23,6 +23,8 @@
                 min: -1
             }
             self.graph = undefined
+            self.searchTerm = undefined
+            self.matchingTerms = undefined
         }
 
         return EnvironmentFactory
