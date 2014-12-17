@@ -11,7 +11,8 @@ require.config({
         'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min',
                    'jquery'],
         'd3': ['/d3/d3'],
-        'cytoscape': ['/cytoscape/dist/cytoscape']
+        'cytoscape': ['/cytoscape/dist/cytoscape'],
+        'grammer': ['/grammer/src/javascript/grammer']
     },
     'shim': {
         'angular': {
@@ -30,6 +31,9 @@ require.config({
         },
         'cytoscape':{
             'exports': 'cytoscape'
+        },
+        'grammer':{
+            'exports': 'grammer'
         }
     },
 

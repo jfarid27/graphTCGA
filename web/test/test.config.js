@@ -23,7 +23,8 @@ require.config({
         'angular': 'bower_components/angular/angular',
         'angularMocks': 'node_modules/angular-mocks/angular-mocks',
         'jquery': '',
-        'd3': 'bower_components/d3/d3'
+        'd3': 'bower_components/d3/d3',
+        'grammer': 'node_modules/grammer/src/javascript/grammer'
     },
 
     'shim': {
@@ -39,6 +40,9 @@ require.config({
         },
         'd3':{
             'exports': 'd3'
+        },
+        'grammer':{
+            'exports': 'grammer'
         }
     },
 
