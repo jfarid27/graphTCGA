@@ -320,7 +320,6 @@
                                 collection:"MABRCA"
                             }
 
-                            $scope.environment.selectedType = {name:'.JSON', value:'json'}
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = {
                                 min: -7,

@@ -83,7 +83,7 @@
 
                     var params = {
                         collection: file.collection,
-                        format: $scope.environment.selectedType.value,
+                        format: 'tsv',
                         interactionThreshold: 1,
                         zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
                         zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
