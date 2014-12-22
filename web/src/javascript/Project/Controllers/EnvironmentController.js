@@ -99,12 +99,12 @@
                 }
             })
 
-            $scope.visualizeGraph = function(){
-                $scope.$emit('visualizeGraph')
+            $scope.visualizeGraph = function(file){
+                $scope.$emit('visualizeGraph', file)
             }
 
-            $scope.downloadGraph = function(){
-                $scope.$emit('downloadGraph')
+            $scope.downloadGraph = function(file){
+                $scope.$emit('downloadGraph', file)
             }
 
         }

@@ -360,12 +360,12 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.downloadGraph()
+                            $scope.downloadGraph({file:"foo"})
                         })
 
                         it('should fire downloadGraph event', function(){
 
-                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph')
+                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph', {file:"foo"})
                         })
                     })
                 })
@@ -375,11 +375,11 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.visualizeGraph()
+                            $scope.visualizeGraph({file:"foo"})
                         })
 
                         it('should fire visualizeGraph event', function(){
-                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph')
+                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {file:"foo"})
                         })
                     })
                 })
