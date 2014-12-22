@@ -6,9 +6,9 @@
 
             var self = this;
 
-            self.selectedFolder = undefined
-            self.selectedFile = undefined
+            self.allFiles = undefined
             self.selectedType = {name:'.TSV', value:'tsv'}
+            self.selectedFolder = undefined
             self.availableTypes = [
                         //{name:'.JSON', value:'json'},
                         {name:'.TSV', value:'tsv'},
@@ -17,6 +17,7 @@
                     ]
             self.availableFolders = undefined
             self.availableFiles = undefined
+            self.allFiles = undefined
             self.interactionThreshold = undefined
             self.zScoreThreshold = {
                 max: 1,
