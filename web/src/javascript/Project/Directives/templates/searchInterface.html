@@ -1,0 +1,49 @@
+
+<div class="row">
+
+    <label>Search:
+        <input ng-model="environment.searchTerm" placeholder="BRCA, mesothelioma"/>
+    </label>
+
+</div>
+
+<div class="row">
+
+
+    <table id="searchTable">
+
+        <thead>
+
+            <tr>
+                <th>Cancer Type</th>
+                <th>Cancer Tag</th>
+                <th>Experiment Type</th>
+                <th>Visualize</th>
+                <th>Download</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+            <tr  ng-repeat='match in environment.matchingDatasets track by $index'>
+                <td>
+                    <p>{{match.name}}</p>
+                </td>
+                <td>
+                    <p>{{match.tag}}</p>
+                </td>
+                <td>
+                    <p>{{match.type}}</p>
+                </td>
+                <td>
+                    <a ng-click="visualizeGraph(match)">Visualize</a>
+                </td>
+                <td>
+                    <a ng-click="downloadGraph(match)">Download</a>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</div>
