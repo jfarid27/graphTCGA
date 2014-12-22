@@ -8,7 +8,17 @@
 
             //Initial folder get
             Api.getFolder().$promise.then(function(data){
+
+
                 $scope.environment.availableFolders = data.folders
+
+                $scope.environment.allFiles = []
+                $scope.environment.availableFolders.map(function(folder){
+                    folder.files.map(function(file){
+                        $scope.environment.allFiles.push(file)
+                    })
+                })
+
             })
 
             $scope.$watch('environment.selectedFolder', function(newval, oldval){

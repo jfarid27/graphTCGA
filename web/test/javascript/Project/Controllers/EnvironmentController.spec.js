@@ -54,13 +54,23 @@
                                         folders:[{
                                           name:"MicroArray",
                                           files: [
-                                            "BRCA_FinalNetwork.pairs"
+                                            {
+                                                name: "Breast invasive carcinoma",
+                                                tag:"BRCA",
+                                                type:"MicroArray",
+                                                collection:"MABRCA"
+                                            }
                                           ]
                                         },
                                         {
                                           name:"RNASeq",
                                           files: [
-                                            "MVA_FinalNetwork.pairs"
+                                            {
+                                                name: "Mesothelioma",
+                                                tag:"MESO",
+                                                type:"RNASeq",
+                                                collection:"RNAMESO"
+                                            }
                                           ]
 
                                         }]
@@ -115,13 +125,23 @@
                         expected = [{
                           name:"MicroArray",
                           files: [
-                            "BRCA_FinalNetwork.pairs"
+                            {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
+                            }
                           ]
                         },
                         {
                           name:"RNASeq",
                           files: [
-                            "MVA_FinalNetwork.pairs"
+                            {
+                                name: "Mesothelioma",
+                                tag:"MESO",
+                                type:"RNASeq",
+                                collection:"RNAMESO"
+                            }
                           ]
 
                         }]
@@ -133,6 +153,11 @@
                     it('should add available folders to scope', function(){
                         expect($scope.environment.availableFolders).toContain(expected[0])
                         expect($scope.environment.availableFolders).toContain(expected[1])
+                    })
+
+                    it('should add all files to scope', function(){
+                        expect($scope.environment.allFiles).toContain(expected[0].files[0])
+                        expect($scope.environment.allFiles).toContain(expected[1].files[0])
                     })
                 })
 
