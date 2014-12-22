@@ -11,13 +11,23 @@ describe('folderStructParseEmitter', function(){
         {
           name:"MicroArray",
           files: [
-            "BRCA_FinalNetwork.pairs"
+            {
+                name: "Breast invasive carcinoma",
+                tag:"BRCA",
+                type:"MicroArray",
+                collection:"MABRCA"
+            }
           ]
         },
         {
           name:"RNASeq",
           files: [
-            "MVA_FinalNetwork.pairs"
+            {
+                name: "Mesothelioma",
+                tag:"MESO",
+                type:"RNASeq",
+                collection:"RNAMESO"
+            }
           ]
 
         }
@@ -56,7 +66,12 @@ describe('folderStructParseEmitter', function(){
     describe('with folder parameter given', function(){
       it('should return files within folder', function(done){
 
-        var expected = ["MVA_FinalNetwork.pairs"]
+        var expected = [{
+            name: "Mesothelioma",
+            tag:"MESO",
+            type:"RNASeq",
+            collection:"RNAMESO"
+        }]
         var callback = function(response){
           response.files.should.containEql(expected[0])
           done()

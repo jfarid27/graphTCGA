@@ -33,7 +33,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-
+        'bower_components/**/test/**/*'
     ],
 
 

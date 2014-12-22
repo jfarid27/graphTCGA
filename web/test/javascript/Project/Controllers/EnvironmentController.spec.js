@@ -5,7 +5,7 @@
     define(deps, function(EnvironmentController){
 
         describe('EnvironmentController', function(){
-            var $scope, scopeConstr, Api, Environment, mockWindow
+            var $scope, scopeConstr, Api, Environment, mockWindow, mockLibrary
 
             beforeEach(function(){
 
@@ -54,13 +54,29 @@
                                         folders:[{
                                           name:"MicroArray",
                                           files: [
-                                            "BRCA_FinalNetwork.pairs"
+                                            {
+                                                name: "Breast invasive carcinoma",
+                                                tag:"BRCA",
+                                                type:"MicroArray",
+                                                collection:"MABRCA"
+                                            }
                                           ]
                                         },
                                         {
                                           name:"RNASeq",
                                           files: [
-                                            "MVA_FinalNetwork.pairs"
+                                            {
+                                                name: "Mesothelioma",
+                                                tag:"MESO",
+                                                type:"RNASeq",
+                                                collection:"RNAMESO"
+                                            },
+                                            {
+                                                name: "Breast invasive carcinoma",
+                                                tag:"BRCA",
+                                                type:"RNASeq",
+                                                collection:"RNABRCA"
+                                            }
                                           ]
 
                                         }]
@@ -93,7 +109,14 @@
 
                 spyOn(Api, 'getFolder').and.callThrough()
 
-                EnvironmentController($scope, new Environment, Api, mockWindow)
+                mockLibrary = {
+                    'search': function(term){
+                        return [{'score':0, 'phrase': {'name': 'BRCA', 'value': 'BRCA'} }]
+                    }
+                }
+
+
+                EnvironmentController($scope, new Environment, Api, mockWindow, mockLibrary)
 
 
             })
@@ -108,13 +131,29 @@
                         expected = [{
                           name:"MicroArray",
                           files: [
-                            "BRCA_FinalNetwork.pairs"
+                            {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
+                            }
                           ]
                         },
                         {
                           name:"RNASeq",
                           files: [
-                            "MVA_FinalNetwork.pairs"
+                            {
+                                name: "Mesothelioma",
+                                tag:"MESO",
+                                type:"RNASeq",
+                                collection:"RNAMESO"
+                            },
+                            {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"RNASeq",
+                                collection:"RNABRCA"
+                            }
                           ]
 
                         }]
@@ -127,17 +166,90 @@
                         expect($scope.environment.availableFolders).toContain(expected[0])
                         expect($scope.environment.availableFolders).toContain(expected[1])
                     })
+
+                    it('should add all files to scope', function(){
+                        expect($scope.environment.allFiles).toContain(expected[0].files[0])
+                        expect($scope.environment.allFiles).toContain(expected[1].files[0])
+                    })
+                })
+
+                describe('environment.searchTerm registered watcher', function(){
+                    describe('when fired', function(){
+
+                        describe('with empty string', function(){
+
+                            beforeEach(function(){
+
+                                spyOn(mockLibrary, 'search').and.callThrough()
+
+                                $scope.$registeredWatchers['environment.searchTerm']("")
+                            })
+
+                            it('should populate matching datasets with undefined', function(){
+                                expect($scope.environment.matchingDatasets).toBeUndefined()
+                            })
+                        })
+
+                        describe('with a search string', function(){
+
+                            var expected
+
+                            beforeEach(function(){
+
+                                expected = [
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"MicroArray",
+                                        collection:"MABRCA"
+                                    },
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"RNASeq",
+                                        collection:"RNABRCA"
+                                    }
+                                ]
+
+                                spyOn(mockLibrary, 'search').and.callThrough()
+
+                                $scope.$registeredWatchers['environment.searchTerm']("Blah")
+                            })
+
+                            it('should call to search library using term',function(){
+                                expect(mockLibrary.search).toHaveBeenCalledWith('Blah', -80)
+                            })
+                            it('should bind matching terms to environment.matchingTerms', function(){
+                                expect($scope.environment.matchingDatasets).toContain(expected[0])
+                                expect($scope.environment.matchingDatasets).toContain(expected[1])
+                            })
+                        })
+                    })
                 })
 
                 describe('environment.selectedFolder registered watcher', function(){
                     describe('when fired', function(){
 
+                        var expected
+
                         beforeEach(function(){
+
+                            expected = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
+                            }
 
                             $scope.environment.selectedFolder = {
                               name:"MicroArray",
                               files: [
-                                "BRCA_FinalNetwork.pairs"
+                                    {
+                                    name: "Breast invasive carcinoma",
+                                    tag:"BRCA",
+                                    type:"MicroArray",
+                                    collection:"MABRCA"
+                                }
                               ]
                             }
 
@@ -145,7 +257,7 @@
                         })
 
                         it('should populate environment.availableFiles correctly', function(){
-                            expect($scope.environment.availableFiles).toContain("BRCA_FinalNetwork.pairs")
+                            expect($scope.environment.availableFiles).toContain(expected)
                         })
                     })
                 })
@@ -154,19 +266,18 @@
 
                     describe('when called with valid environment selections', function(){
 
-                        var expected
+                        var expected, file
 
                         beforeEach(function(){
                             spyOn(Api, 'getFile').and.callThrough()
 
-
-                            $scope.environment.selectedFolder = {
-                              name:"MicroArray",
-                              files: [
-                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
-                              ]
+                            file = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
                             }
-                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
+
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = {min:3, max: 12}
 
@@ -178,7 +289,7 @@
                                 zScoreThresholdMin: -5.5
                             }
 
-                            $scope.$emit('visualizeGraph')
+                            $scope.$emit('visualizeGraph', file)
                         })
 
                         it('should call Api getfile', function(){
@@ -197,39 +308,47 @@
 
                     describe('when called with valid environment selections', function(){
 
-                        var expected
+                        var expected, file, expectedAddress
 
                         beforeEach(function(){
-                            spyOn(Api, 'getFile').and.callThrough()
+                            spyOn(mockWindow, 'open').and.callThrough()
 
-                            $scope.environment.selectedFolder = {
-                              name:"MicroArray",
-                              files: [
-                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
-                              ]
+                            file = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
                             }
-                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
-                            $scope.environment.selectedType = {name:'.JSON', value:'json'}
+
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = {
-                                min: -5.5,
-                                max: 5.5
+                                min: -7,
+                                max: 7
                             }
 
                             expected = {
                                 collection:"MABRCA",
                                 file: true,
-                                format: 'json',
+                                format: 'tsv',
                                 interactionThreshold: 1,
-                                zScoreThresholdMin: -5.5,
-                                zScoreThresholdMax: 5.5
+                                zScoreThresholdMin: -7,
+                                zScoreThresholdMax: 7
                             }
 
-                            $scope.$emit('downloadGraph')
+                            expectedAddress = "/file?collection=" + expected.collection
+                                + "&file=" + expected.file
+                                + "&format=" + expected.format
+                                + "&interactionThreshold=" + expected.interactionThreshold
+                                + "&zScoreThresholdMax=" + expected.zScoreThresholdMax
+                                + "&zScoreThresholdMin=" + expected.zScoreThresholdMin
+
+                            $scope.$emit('downloadGraph', file)
                         })
 
-                        it('should call Api getfile', function(){
-                            expect(Api.getFile).toHaveBeenCalledWith(expected)
+                        it('should open a new window with address of given collection and parameters', function(){
+
+                            expect(mockWindow.open).toHaveBeenCalledWith(expectedAddress)
+
                         })
                     })
 
@@ -240,12 +359,12 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.downloadGraph()
+                            $scope.downloadGraph({file:"foo"})
                         })
 
                         it('should fire downloadGraph event', function(){
 
-                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph')
+                            expect($scope.$emit).toHaveBeenCalledWith('downloadGraph', {file:"foo"})
                         })
                     })
                 })
@@ -255,11 +374,11 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.visualizeGraph()
+                            $scope.visualizeGraph({file:"foo"})
                         })
 
                         it('should fire visualizeGraph event', function(){
-                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph')
+                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {file:"foo"})
                         })
                     })
                 })

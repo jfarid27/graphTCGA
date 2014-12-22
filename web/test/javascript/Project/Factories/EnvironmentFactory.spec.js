@@ -18,9 +18,9 @@
                 })
             })
 
-            describe('selectedFiles property', function(){
+            describe('allFiles property', function(){
                 it('should be defined', function(){
-                    expect(Object.keys(environment)).toContain('selectedFile')
+                    expect(Object.keys(environment)).toContain('allFiles')
                 })
             })
 
