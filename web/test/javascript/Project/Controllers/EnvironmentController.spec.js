@@ -200,12 +200,26 @@
                 describe('environment.selectedFolder registered watcher', function(){
                     describe('when fired', function(){
 
+                        var expected
+
                         beforeEach(function(){
+
+                            expected = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
+                            }
 
                             $scope.environment.selectedFolder = {
                               name:"MicroArray",
                               files: [
-                                "BRCA_FinalNetwork.pairs"
+                                    {
+                                    name: "Breast invasive carcinoma",
+                                    tag:"BRCA",
+                                    type:"MicroArray",
+                                    collection:"MABRCA"
+                                }
                               ]
                             }
 
@@ -213,7 +227,7 @@
                         })
 
                         it('should populate environment.availableFiles correctly', function(){
-                            expect($scope.environment.availableFiles).toContain("BRCA_FinalNetwork.pairs")
+                            expect($scope.environment.availableFiles).toContain(expected)
                         })
                     })
                 })
@@ -222,19 +236,18 @@
 
                     describe('when called with valid environment selections', function(){
 
-                        var expected
+                        var expected, file
 
                         beforeEach(function(){
                             spyOn(Api, 'getFile').and.callThrough()
 
-
-                            $scope.environment.selectedFolder = {
-                              name:"MicroArray",
-                              files: [
-                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
-                              ]
+                            file = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
                             }
-                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
+
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = {min:3, max: 12}
 
@@ -246,7 +259,7 @@
                                 zScoreThresholdMin: -5.5
                             }
 
-                            $scope.$emit('visualizeGraph')
+                            $scope.$emit('visualizeGraph', file)
                         })
 
                         it('should call Api getfile', function(){
@@ -265,39 +278,48 @@
 
                     describe('when called with valid environment selections', function(){
 
-                        var expected
+                        var expected, file, expectedAddress
 
                         beforeEach(function(){
-                            spyOn(Api, 'getFile').and.callThrough()
+                            spyOn(mockWindow, 'open').and.callThrough()
 
-                            $scope.environment.selectedFolder = {
-                              name:"MicroArray",
-                              files: [
-                                  {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
-                              ]
+                            file = {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"MicroArray",
+                                collection:"MABRCA"
                             }
-                            $scope.environment.selectedFile = {name:"BRCA_FinalNetwork.pairs", collection: "MABRCA"}
+
                             $scope.environment.selectedType = {name:'.JSON', value:'json'}
                             $scope.environment.interactionThreshold = 1
                             $scope.environment.zScoreThreshold = {
-                                min: -5.5,
-                                max: 5.5
+                                min: -7,
+                                max: 7
                             }
 
                             expected = {
                                 collection:"MABRCA",
                                 file: true,
-                                format: 'json',
+                                format: 'tsv',
                                 interactionThreshold: 1,
-                                zScoreThresholdMin: -5.5,
-                                zScoreThresholdMax: 5.5
+                                zScoreThresholdMin: -7,
+                                zScoreThresholdMax: 7
                             }
 
-                            $scope.$emit('downloadGraph')
+                            expectedAddress = "/file?collection=" + expected.collection
+                                + "&file=" + expected.file
+                                + "&format=" + expected.format
+                                + "&interactionThreshold=" + expected.interactionThreshold
+                                + "&zScoreThresholdMax=" + expected.zScoreThresholdMax
+                                + "&zScoreThresholdMin=" + expected.zScoreThresholdMin
+
+                            $scope.$emit('downloadGraph', file)
                         })
 
-                        it('should call Api getfile', function(){
-                            expect(Api.getFile).toHaveBeenCalledWith(expected)
+                        it('should open a new window with address of given collection and parameters', function(){
+
+                            expect(mockWindow.open).toHaveBeenCalledWith(expectedAddress)
+
                         })
                     })
 

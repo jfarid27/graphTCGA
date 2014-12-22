@@ -38,12 +38,11 @@
                 }
             })
 
-            $scope.$on('visualizeGraph', function(event){
-                if ($scope.environment.selectedFolder &&
-                    $scope.environment.selectedFile){
+            $scope.$on('visualizeGraph', function(event, file){
+                if (file){
 
                     var params = {
-                        collection: $scope.environment.selectedFile.collection,
+                        collection: file.collection,
                         format: "cytoscape",
                         interactionThreshold: 1,
                         zScoreThresholdMin: -5.5,
@@ -56,22 +55,21 @@
                 }
             })
 
-            $scope.$on('downloadGraph', function(event){
-                if ($scope.environment.selectedFolder &&
-                    $scope.environment.selectedFile &&
+            $scope.$on('downloadGraph', function(event, file){
+                if (file &&
                     $scope.environment.selectedType &&
                     $scope.environment.zScoreThreshold.max &&
                     $scope.environment.zScoreThreshold.min){
 
                     var params = {
-                        collection: $scope.environment.selectedFile.collection,
+                        collection: file.collection,
                         format: $scope.environment.selectedType.value,
                         interactionThreshold: 1,
                         zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
                         zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
                         file: true
                     }
-                    Api.getFile(params)
+
                     var string = "collection=" + params.collection
                     + "&file=true&format=tsv&interactionThreshold=1&zScoreThresholdMax="
                     + params.zScoreThresholdMax + "&zScoreThresholdMin="
