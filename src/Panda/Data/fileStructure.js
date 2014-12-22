@@ -4,23 +4,33 @@ exports.folders = [
     name:"MicroArray",
     files: [
         {
-            name:"BRCA",
+            name: "Breast invasive carcinoma",
+            tag:"BRCA",
+            type:"MicroArray",
             collection:"MABRCA"
         },
         {
-            name:"COAD",
+            name: "Colon adenocarcinoma",
+            tag:"COAD",
+            type:"MicroArray",
             collection:"MACOAD"
         },
         {
-            name:"GBM",
+            name: "Glioblastoma multiforme",
+            tag:"GBM",
+            type:"MicroArray",
             collection:"MAGBM"
         },
         {
-            name:"KIRC",
+            name:"Kidney renal clear cell carcinoma",
+            tag:"KIRC",
+            type:"MicroArray",
             collection:"MAKIRC"
         },
         {
-            name:"KIRP",
+            name:"Kidney renal papillary cell carcinoma",
+            tag:"KIRP",
+            type:"MicroArray",
             collection:"MAKIRP"
         }
 
