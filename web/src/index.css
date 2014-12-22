@@ -1,5 +1,9 @@
 div.panel {
-    margin-top: 20px
+    margin-top: 20px;
+}
+
+div.panel.fixed-height {
+    height: 600px;
 }
 
 div#about {
@@ -8,7 +12,7 @@ div#about {
 }
 
 #vis {
-    height: 400px;
+    height: 200px;
     width: 100%;
     position: relative;
     margin-top: 20px;
@@ -16,4 +20,14 @@ div#about {
     top: 0;
     border-style: solid;
     border-width: 2px;
+}
+
+table#searchTable {
+    margin-top: 20px;
+    height:300px;
+}
+
+.environment-interface-text {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
