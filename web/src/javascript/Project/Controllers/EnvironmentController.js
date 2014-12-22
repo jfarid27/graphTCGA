@@ -77,7 +77,6 @@
 
             $scope.$on('downloadGraph', function(event, file){
                 if (file &&
-                    $scope.environment.selectedType &&
                     $scope.environment.zScoreThreshold.max &&
                     $scope.environment.zScoreThreshold.min){
 
