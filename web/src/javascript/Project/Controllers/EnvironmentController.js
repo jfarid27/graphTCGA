@@ -14,10 +14,12 @@
 
                 $scope.environment.allFiles = []
                 $scope.environment.availableFolders.map(function(folder){
+
                     folder.files.map(function(file){
                         $scope.environment.allFiles.push(file)
                     })
                 })
+
 
             })
 
@@ -29,12 +31,30 @@
 
             $scope.$watch('environment.searchTerm', function(newval, oldval){
                 if (newval == "" || typeof newval == 'undefined'){
-                    $scope.environment.matchingTerms = []
+                    $scope.environment.matchingDatasets = undefined
                     return
                 }
 
                 if (newval.length > 2) {
-                    $scope.environment.matchingTerms = library.search(newval, -80)
+                    var matchingTerms = library.search(newval, -80)
+                    var matchingFiles = []
+
+                    for (term in matchingTerms){
+
+                        for (file in $scope.environment.allFiles) {
+
+                            var filetag = $scope.environment.allFiles[file].tag
+
+                            var matchingTag = matchingTerms[term].phrase.value
+
+                            if (filetag == matchingTag){
+                                matchingFiles.push($scope.environment.allFiles[file])
+                            }
+                        }
+                    }
+
+                    $scope.environment.matchingDatasets = matchingFiles
+
                 }
             })
 

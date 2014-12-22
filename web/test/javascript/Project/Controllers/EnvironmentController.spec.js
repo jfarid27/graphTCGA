@@ -70,6 +70,12 @@
                                                 tag:"MESO",
                                                 type:"RNASeq",
                                                 collection:"RNAMESO"
+                                            },
+                                            {
+                                                name: "Breast invasive carcinoma",
+                                                tag:"BRCA",
+                                                type:"RNASeq",
+                                                collection:"RNABRCA"
                                             }
                                           ]
 
@@ -105,7 +111,7 @@
 
                 mockLibrary = {
                     'search': function(term){
-                        return ['foo', 'bar']
+                        return [{'score':0, 'phrase': {'name': 'BRCA', 'value': 'BRCA'} }]
                     }
                 }
 
@@ -141,6 +147,12 @@
                                 tag:"MESO",
                                 type:"RNASeq",
                                 collection:"RNAMESO"
+                            },
+                            {
+                                name: "Breast invasive carcinoma",
+                                tag:"BRCA",
+                                type:"RNASeq",
+                                collection:"RNABRCA"
                             }
                           ]
 
@@ -173,13 +185,31 @@
                                 $scope.$registeredWatchers['environment.searchTerm']("")
                             })
 
-                            it('should populate matching terms with an empty array', function(){
-                                expect($scope.environment.matchingTerms.length).toBe(0)
+                            it('should populate matching datasets with undefined', function(){
+                                expect($scope.environment.matchingDatasets).toBeUndefined()
                             })
                         })
 
                         describe('with a search string', function(){
+
+                            var expected
+
                             beforeEach(function(){
+
+                                expected = [
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"MicroArray",
+                                        collection:"MABRCA"
+                                    },
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"RNASeq",
+                                        collection:"RNABRCA"
+                                    }
+                                ]
 
                                 spyOn(mockLibrary, 'search').and.callThrough()
 
@@ -190,8 +220,8 @@
                                 expect(mockLibrary.search).toHaveBeenCalledWith('Blah', -80)
                             })
                             it('should bind matching terms to environment.matchingTerms', function(){
-                                expect($scope.environment.matchingTerms).toContain('foo')
-                                expect($scope.environment.matchingTerms).toContain('bar')
+                                expect($scope.environment.matchingDatasets).toContain(expected[0])
+                                expect($scope.environment.matchingDatasets).toContain(expected[1])
                             })
                         })
                     })
