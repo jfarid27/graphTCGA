@@ -1,21 +1,13 @@
 
-<div class='panel'>
+<div class='panel fixed-height'>
 
-    <h5>Sequence Type:</h5>
-    <select ng-model="environment.selectedFolder" ng-options="folder.name for folder in environment.availableFolders"></select>
-    <h5>Cancer Data Type:</h5>
-    <select ng-model="environment.selectedFile" ng-options="file.name for file in environment.availableFiles"></select>
-    <h5>File Format:</h5>
-    <select ng-model="environment.selectedType" ng-options="type.name for type in environment.availableTypes"></select>
+    <h5 class="environment-interface-text">Network Demo:</h5>
+    <graph-visualization></graph-visualization>
 
-    <h5>Z-Score Threshold:</h5>
-    <p>Maximum Bound: {{environment.zScoreThreshold.max}}</p>
-    <p>Minimum Bound: {{environment.zScoreThreshold.min}}</p>
-
+    <h5 class="environment-interface-text">Z-Score Threshold:</h5>
     <histogram-visualization></histogram-visualization>
 
-    <button ng-click="visualizeGraph()" class="button expand">View Demo</button>
-    <button ng-click="downloadGraph()" class="button expand">Download</button>
-
+    <p>Z-Score Maximum Bound: {{environment.zScoreThreshold.max}} </p>
+    <p>Z-Score Minimum Bound: {{environment.zScoreThreshold.min}}</p>
 
 </div>
