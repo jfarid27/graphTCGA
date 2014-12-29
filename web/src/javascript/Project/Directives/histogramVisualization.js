@@ -24,10 +24,19 @@
                             {x: 3, y: .0013}
                         ]
 
+                        var params = {
+                            width:300,
+                            height:190
+                        }
+
                         var svg = d3.select("#histogram").append('svg')
+                        .attr("width", params.width)
+                        .attr("height", params.height)
 
                         var histogram = d3.custom.histogram()
                             .data(data)
+                            .width(params.width)
+                            .height(params.height)
                             .on('brushing', function(brush){
                                 var extent = brush.extent()
                                 scope.environment.zScoreThreshold.max = extent[1]
