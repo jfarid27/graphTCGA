@@ -20,6 +20,9 @@
                     })
                 })
 
+                $scope.environment.matchingDatasets =
+                    $scope.environment.allFiles
+
 
             })
 
@@ -31,7 +34,7 @@
 
             $scope.$watch('environment.searchTerm', function(newval, oldval){
                 if (newval == "" || typeof newval == 'undefined'){
-                    $scope.environment.matchingDatasets = undefined
+                    $scope.environment.matchingDatasets = $scope.environment.allFiles
                     return
                 }
 
