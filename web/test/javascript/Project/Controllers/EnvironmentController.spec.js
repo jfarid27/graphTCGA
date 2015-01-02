@@ -171,6 +171,11 @@
                         expect($scope.environment.allFiles).toContain(expected[0].files[0])
                         expect($scope.environment.allFiles).toContain(expected[1].files[0])
                     })
+
+                    it('should add all files to matching datasets', function(){
+                        expect($scope.environment.matchingDatasets).toContain(expected[0].files[0])
+                        expect($scope.environment.matchingDatasets).toContain(expected[1].files[0])
+                    })
                 })
 
                 describe('environment.searchTerm registered watcher', function(){
@@ -178,15 +183,51 @@
 
                         describe('with empty string', function(){
 
+                            var expected
+
                             beforeEach(function(){
+                                expected = [{
+                                  name:"MicroArray",
+                                  files: [
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"MicroArray",
+                                        collection:"MABRCA"
+                                    }
+                                  ]
+                                },
+                                {
+                                  name:"RNASeq",
+                                  files: [
+                                    {
+                                        name: "Mesothelioma",
+                                        tag:"MESO",
+                                        type:"RNASeq",
+                                        collection:"RNAMESO"
+                                    },
+                                    {
+                                        name: "Breast invasive carcinoma",
+                                        tag:"BRCA",
+                                        type:"RNASeq",
+                                        collection:"RNABRCA"
+                                    }
+                                  ]
+
+                                }]
 
                                 spyOn(mockLibrary, 'search').and.callThrough()
 
                                 $scope.$registeredWatchers['environment.searchTerm']("")
+
                             })
 
                             it('should populate matching datasets with undefined', function(){
-                                expect($scope.environment.matchingDatasets).toBeUndefined()
+
+                                expect($scope.environment.matchingDatasets)
+                                    .toContain(expected[0].files[0])
+                                expect($scope.environment.matchingDatasets)
+                                    .toContain(expected[1].files[0])
                             })
                         })
 
