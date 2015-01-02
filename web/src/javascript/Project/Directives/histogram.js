@@ -6,8 +6,8 @@
         d3.custom.histogram = function module(){
 
             var params = {
-                width: 220,
-                height: 100,
+                width: 300,
+                height: 180,
                 margin: {
                     top: 30,
                     bottom: 60,
@@ -44,34 +44,34 @@
                 var bars = histogram.append('g').classed('bar-group', true)
 
                 var axisWidth = params.width - params.margin.right - params.margin.left
-                var axisHeight = params.width - params.margin.right - params.margin.left
+                var axisHeight = params.height - params.margin.top - params.margin.bottom - 30
 
                 var xScale = d3.scale.linear()
                     .domain([d3.min(data, function(d){ return d.x }), d3.max(data, function(d){ return d.x })+1])
-                    .range([params.margin.left, params.margin.left + params.width])
+                    .range([params.margin.left, params.margin.left + axisWidth])
 
                 var yScale = d3.scale.linear()
                     .domain([d3.min(data, function(d){ return d.y }), d3.max(data, function(d){ return d.y })])
-                    .range([params.margin.top + params.height, params.margin.top])
+                    .range([params.margin.top + axisHeight, params.margin.top])
 
                 var xAxis = d3.svg.axis().scale(xScale),
                     yAxis = d3.svg.axis().scale(yScale).ticks(4).orient("right")
 
                 bars.selectAll('rect').data(data).enter().append('rect')
                     .attr('width', xScale(1) - xScale(0) - 2)
-                    .attr('height', function(d){return params.margin.top + params.height - yScale(d.y)})
+                    .attr('height', function(d){return params.margin.top + axisHeight - yScale(d.y)})
                     .attr('x', function(d, i){return xScale(d.x)})
-                    .attr('y',  function(d,i){return yScale(d.y)})
+                    .attr('y',  function(d,i){return  yScale(d.y)})
                     .attr('fill', '#0058ff')
 
                 histogram.append("g")
                     .attr("class", "x axis")
-                    .attr("transform", "translate(0," + (params.height + params.margin.top) + ")")
+                    .attr("transform", "translate(0," + (axisHeight + params.margin.top) + ")")
                     .call(xAxis);
 
                 histogram.append("g")
                     .attr("class", "y axis")
-                    .attr("transform", "translate(" + (params.margin.left + params.width) + ",0)")
+                    .attr("transform", "translate(" + (axisWidth + params.margin.left) + ",0)")
                     .call(yAxis);
 
                 brush = d3.svg.brush()
@@ -86,7 +86,7 @@
                     .call(brush);
 
                 gBrush.selectAll("rect")
-                    .attr("height", params.height+3)
+                    .attr("height", axisHeight + 9)
                     .attr('y', params.margin.top -3)
                     .attr('fill', 'url(#diagonalHatch)');
 
@@ -94,16 +94,37 @@
                 legend.append('rect')
                     .attr('height', 15)
                     .attr('width', 15)
-                    .attr('x', params.width)
+                    .attr('x', params.margin.left + 110)
                     .attr('y', 0)
                     .attr('fill', 'url(#diagonalHatch)');
 
                 legend.append('text')
-                    .attr('x', params.width - 105)
+                    .attr('x', params.margin.left)
                     .attr('y', 13)
                     .text( "Range (Excluded) - ")
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "12px")
+                    .attr("fill", "black");
+
+                legend.append('text')
+                    .classed('axis-label x-label', true)
+                    .attr('x', params.margin.left + (axisWidth/2) )
+                    .attr('y', params.margin.top + axisHeight + 34)
+                    .text( "Z-Score")
+                    .attr("text-anchor", "middle")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "14px")
+                    .attr("fill", "black");
+
+
+                legend.append('text')
+                    .classed('axis-label y-label', true)
+                    .attr('x', params.margin.left + (axisWidth) + 50 )
+                    .attr('y', params.margin.top + (axisHeight/2))
+                    .text( "(N)")
+                    .attr("text-anchor", "middle")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "14px")
                     .attr("fill", "black");
 
 
