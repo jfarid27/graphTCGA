@@ -1,8 +1,8 @@
-div.panel {
-    margin-top: 20px;
+div.spaced {
+    margin-top:20px
 }
 
-div.panel.fixed-height {
+div.fixed-height {
     height: 600px;
 }
 
