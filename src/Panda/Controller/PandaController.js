@@ -54,12 +54,21 @@ util.inherits(PandaController, events.EventEmitter)
 exports.construct = PandaController
 exports.partial = function(){
 
-    var folderStructureEmitter, dbConnectionEmitter, dbParseModule
+    var folderStructureEmitter, dbConnectionEmitter, dbParseModule, geneCheckEmitter
 
     function exports(){
         //Here dbConnectionEmitter is partial and must be instantiated
         var dbConnection = dbConnectionEmitter()
-        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule);
+        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule, geneCheckEmitter(dbConnection));
+    }
+
+    exports.geneCheckEmitter = function(gCEmitter){
+        if (arguments.length >0){
+            geneCheckEmitter = gCEmitter
+            return this
+        }
+
+        return geneCheckEmitter
     }
 
     exports.folderStruct = function(folderEmitter){
