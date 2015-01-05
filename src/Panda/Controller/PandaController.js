@@ -1,7 +1,7 @@
 var events = require('events'),
   util = require('util')
 
-var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
+var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule, geneCheckEmitter){
     var self = this;
     events.EventEmitter.call(self);
 
@@ -30,6 +30,22 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
 
     self.on('getFolders', function(params, success, error){
         folderStructureEmitter.emit('getFolders', params, success, error)
+    })
+
+    self.on('geneCheck', function(params, success, error){
+        geneCheckEmitter.on('data', function(data){
+            self.emit('data', data)
+        })
+
+        geneCheckEmitter.on('close', function(){
+            self.emit('close')
+        })
+
+        geneCheckEmitter.on('error', function(err){
+            self.emit('error', err)
+        })
+
+        geneCheckEmitter.emit('geneCheck', params)
     })
 
 }
