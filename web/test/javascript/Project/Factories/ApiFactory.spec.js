@@ -6,14 +6,43 @@
 
         describe('ApiFactory', function(){
 
-            var api, fileResource, folderResource
+            var api, fileResource, folderResource, geneCheckResource
+
             beforeEach(function(){
 
                 fileResource = {get: function(){return 'bar'}}
 
                 folderResource = {get: function(params){return (params && params.folder) ? 'zed' : 'haz'}}
 
-                api = new ApiFactory(fileResource, folderResource)
+                geneCheckResource = {
+                    get:function(params){
+                        return (params && params.gene && params.zScoreThreshold && params.collection) ? 'OK':'Fail'
+                    }
+                }
+
+                api = new ApiFactory(fileResource, folderResource, geneCheckResource)
+
+            })
+
+            describe('on geneCheck call', function(){
+
+                describe('with clean params given', function(){
+
+                    var response, mockParams
+
+                    beforeEach(function(){
+
+                        mockParams = {'gene': 'FOO', 'collection':"MAFOO", 'zScoreThreshold': 5}
+                        spyOn(geneCheckResource, 'get').and.callThrough()
+                        response = api.getGeneCheck(mockParams)
+
+                    })
+
+
+                    it('should return resource response', function(){
+                        expect(response).toBe("OK")
+                    })
+                })
 
             })
 
