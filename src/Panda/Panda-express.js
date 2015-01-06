@@ -6,7 +6,8 @@ var fs = require('fs'),
         .get(fileStructure),
     dbParser = require('./Modules/dbParse.js').get(),
     PandaController = require('./Controller/PandaController.js').partial(),
-    dbConnectionEmitter = require('./Modules/DBConnectionEmitter.js').partial()
+    dbConnectionEmitter = require('./Modules/DBConnectionEmitter.js').partial(),
+    geneCheckEmitter = require('./Modules/geneCheckEmitter').get
 
 var pandaExpress = function(app, dbUrl) {
 
@@ -18,6 +19,7 @@ var pandaExpress = function(app, dbUrl) {
         .folderStruct(folderStructParseEmitter)
         .dbConn(dbConnectionEmitter)
         .dbParser(dbParser)
+        .geneCheckEmitter(geneCheckEmitter)
 
     pandaRest(app, PandaController)
 }
