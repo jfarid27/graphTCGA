@@ -7,7 +7,8 @@ describe('PandaController', function(){
 
     var mockDbParseModule,
         mockFolderStructureEmitter,
-        mockDBConnectionEmitter
+        mockDBConnectionEmitter,
+        mockGeneCheckEmitter
 
     beforeEach(function(){
 
@@ -16,6 +17,25 @@ describe('PandaController', function(){
         }
 
         mockFolderStructureEmitter = {
+             on: function(event, callback){
+                if(this.$registeredWatchers[event]){
+                    this.$registeredWatchers[event].push(callback)
+                } else {
+                    this.$registeredWatchers[event] = [callback]
+                }
+            },
+            emit: function(){
+                var self = this;
+                var args = Array.prototype.slice.call(arguments)
+                var event = args.shift()
+                for (var k in self.$registeredWatchers[event]) {
+                    self.$registeredWatchers[event][k].apply(self, args)
+                }
+            },
+            $registeredWatchers: {}
+        }
+
+        mockGeneCheckEmitter = {
              on: function(event, callback){
                 if(this.$registeredWatchers[event]){
                     this.$registeredWatchers[event].push(callback)
@@ -59,6 +79,7 @@ describe('PandaController', function(){
         mockDbParseModule = undefined
         mockFolderStructureEmitter = undefined
         mockDBConnectionEmitter = undefined
+        mockGeneCheckEmitter = undefined
 
     })
 
@@ -68,7 +89,7 @@ describe('PandaController', function(){
         var Controller
 
         beforeEach(function(){
-            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule)
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule, mockGeneCheckEmitter)
         })
 
         it('should emit getFile on dbConnection', function(done){
@@ -135,7 +156,7 @@ describe('PandaController', function(){
         var Controller
 
         beforeEach(function(){
-            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule)
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule, mockGeneCheckEmitter)
         })
 
 
@@ -147,6 +168,79 @@ describe('PandaController', function(){
 
             Controller.emit('getFolders')
         })
+    })
+
+    describe('on geneCheck event', function(){
+
+        var Controller
+
+        beforeEach(function(){
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule, mockGeneCheckEmitter)
+        })
+
+        it('should emit geneCheck event on geneCheckEmitter', function(done){
+
+            mockGeneCheckEmitter.on('geneCheck', function(params){
+                params.collection.should.eql('foo')
+                params.zScoreThreshold.should.eql(1)
+                done()
+            })
+
+            Controller.emit('geneCheck', {collection:'foo', zScoreThreshold: 1})
+
+        })
+
+        describe('on geneCheckEmitter data event', function(){
+
+            beforeEach(function(){
+                Controller.emit('geneCheck', {collection:'foo', zScoreThreshold: 1})
+
+            })
+
+            it('should emit data event with returned data', function(done){
+
+                Controller.on('data', function(data){
+                    data.foo.should.eql(true)
+                    done()
+                })
+
+                mockGeneCheckEmitter.emit('data', {'foo': true})
+
+            })
+        })
+
+        describe('on geneCheckEmitter close event', function(){
+
+            beforeEach(function(){
+                Controller.emit('geneCheck', {collection:'foo', zScoreThreshold: 1})
+            })
+
+            it('should emit close event', function(done){
+                Controller.on('close', function(data){
+                    done()
+                })
+
+                mockGeneCheckEmitter.emit('close')
+            })
+        })
+
+        describe('on geneCheckEmitter error event', function(){
+
+            beforeEach(function(){
+                Controller.emit('geneCheck', {collection:'foo', zScoreThreshold: 1})
+            })
+
+            it('should emit error event', function(done){
+
+                Controller.on('error', function(data){
+                    done()
+                })
+
+                mockGeneCheckEmitter.emit('error')
+
+            })
+        })
+
     })
 
 })

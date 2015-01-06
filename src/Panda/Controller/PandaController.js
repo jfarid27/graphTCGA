@@ -1,7 +1,7 @@
 var events = require('events'),
   util = require('util')
 
-var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule){
+var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbParseModule, geneCheckEmitter){
     var self = this;
     events.EventEmitter.call(self);
 
@@ -32,18 +32,43 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
         folderStructureEmitter.emit('getFolders', params, success, error)
     })
 
+    self.on('geneCheck', function(params, success, error){
+        geneCheckEmitter.on('data', function(data){
+            self.emit('data', data)
+        })
+
+        geneCheckEmitter.on('close', function(){
+            self.emit('close')
+        })
+
+        geneCheckEmitter.on('error', function(err){
+            self.emit('error', err)
+        })
+
+        geneCheckEmitter.emit('geneCheck', params)
+    })
+
 }
 util.inherits(PandaController, events.EventEmitter)
 
 exports.construct = PandaController
 exports.partial = function(){
 
-    var folderStructureEmitter, dbConnectionEmitter, dbParseModule
+    var folderStructureEmitter, dbConnectionEmitter, dbParseModule, geneCheckEmitter
 
     function exports(){
         //Here dbConnectionEmitter is partial and must be instantiated
         var dbConnection = dbConnectionEmitter()
-        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule);
+        return new PandaController(folderStructureEmitter, dbConnection, dbParseModule, geneCheckEmitter(dbConnection));
+    }
+
+    exports.geneCheckEmitter = function(gCEmitter){
+        if (arguments.length >0){
+            geneCheckEmitter = gCEmitter
+            return this
+        }
+
+        return geneCheckEmitter
     }
 
     exports.folderStruct = function(folderEmitter){
