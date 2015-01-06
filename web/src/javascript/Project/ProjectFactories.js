@@ -21,7 +21,7 @@
 
                 return nGrams
             }])
-            .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource', ApiFactory])
+            .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource','Project.GeneCheckResource', ApiFactory])
             .factory('Project.FileResource', ['$resource', function($resource){
                 return $resource('/file',{},{
                     get:{
@@ -38,6 +38,16 @@
                         method:"GET"
                     }
                 })
+            }])
+            .factory('Project.GeneCheckResource',['$resource', function($resource){
+                return $resource('/geneCheck'), {},{
+                    get:{
+                        method:"GET",
+                        params:{
+                            'format':'json'
+                        }
+                    }
+                }
             }])
 
         }
