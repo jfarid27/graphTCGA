@@ -44,6 +44,15 @@
                             }
                         }
                     },
+                    getNearby: function(params){
+                        return {
+                            $promise: {
+                                then: function(success){
+                                    success({edges: ['blah', 'blah2']})
+                                }
+                            }
+                        }
+                    },
                     downloadFile: function(params){ return },
                     getFolder: function(params){
                         return {
@@ -175,6 +184,63 @@
                     it('should add all files to matching datasets', function(){
                         expect($scope.environment.matchingDatasets).toContain(expected[0].files[0])
                         expect($scope.environment.matchingDatasets).toContain(expected[1].files[0])
+                    })
+                })
+
+                describe('geneExplore event', function(){
+
+                    beforeEach(function(){
+                        spyOn(Api, 'getNearby').and.callThrough()
+
+                        gene = {
+                            gene: "AR",
+                            collection:"MABRCA"
+                        }
+
+                        expected = {
+                            collection: "MABRCA",
+                            format: 'cytoscape',
+                            interactionThreshold: 1,
+                            gene: "AR"
+                        }
+
+                        $scope.$emit('geneExplore', gene)
+
+                    })
+
+                    it('should call api to get gene nearby network', function(){
+                        expect(Api.getNearby).toHaveBeenCalledWith(expected)
+                    })
+
+                    describe('when api response is ok', function(){
+                        it('should populate environment.graph with response', function(){
+                            expect($scope.environment.graph.edges).toContain('blah')
+                            expect($scope.environment.graph.edges).toContain('blah2')
+                        })
+                    })
+                })
+
+                describe('geneExplore function wrapper', function(){
+
+                    beforeEach(function(){
+                        $scope.environment.selectedGene = "AR"
+                        $scope.environment.selectedFile = {
+                            name: "Breast invasive carcinoma",
+                            tag:"BRCA",
+                            type:"MicroArray",
+                            collection:"MABRCA"
+                        }
+                    })
+
+                    it('should raise gene explore with environment variables', function(done){
+
+                        $scope.$on('geneExplore', function(event, params){
+                            expect(params.gene).toBe('AR')
+                            expect(params.collection).toBe("MABRCA")
+                            done()
+                        })
+
+                        $scope.geneExplore()
                     })
                 })
 

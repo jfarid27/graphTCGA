@@ -78,6 +78,23 @@
                 }
             })
 
+            $scope.$on('geneExplore', function(event, search){
+
+                if(search.gene){
+
+                    var params = {
+                        collection: search.collection,
+                        gene: search.gene,
+                        interactionThreshold: 1,
+                        format: "cytoscape"
+                    }
+
+                    Api.getNearby(params).$promise.then(function(data){
+                        $scope.environment.graph = data
+                    })
+                }
+            })
+
             $scope.$on('downloadGraph', function(event, file){
                 if (file &&
                     $scope.environment.zScoreThreshold.max &&
@@ -103,6 +120,13 @@
 
             $scope.visualizeGraph = function(file){
                 $scope.$emit('visualizeGraph', file)
+            }
+
+            $scope.geneExplore = function(){
+                $scope.$emit('geneExplore',{
+                    gene: $scope.environment.selectedGene,
+                    collection: $scope.environment.selectedFile.collection
+                })
             }
 
             $scope.downloadGraph = function(file){
