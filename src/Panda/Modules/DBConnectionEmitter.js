@@ -8,6 +8,58 @@ function DBConnectionEmitter(dburl, dbClient){
     events.EventEmitter.call(self)
 
 
+    self.on('getNearby', function(params){
+        if (!params || !params.collection || !params.gene){
+
+            self.emit('error', {msg: "DBConnectionEmitter Error: Missing getNearby params"})
+            return
+        }
+
+        dbClient.connect(dburl, function(err, db){
+
+            if (err){
+
+                var message = "DBConnectionEmitter Error: dbClient connection failed!"
+                self.emit('error', {msg:message})
+                return
+            }
+
+            db.collection(params.collection, function(err, collection){
+
+                if (err){
+                    var message = "DBConnectionEmitter Error: db collection instance creation failed!"
+                    self.emit('error', {msg:message})
+                    return
+                }
+
+                var query = {
+                    $or:[
+                        {
+                            "source":params.gene
+                        },
+                        {
+                            "target":params.gene
+                        }
+                    ]
+                }
+
+                var cursorStream = collection.find(query, {_id:0}).stream()
+
+                cursorStream.on('data', function(data){
+                    self.emit('data', data)
+                })
+
+                cursorStream.on('close', function(){
+
+                    db.close()
+                    self.emit('close')
+
+                })
+            })
+
+        })
+    })
+
     self.on('getFile', function(params){
 
         if (!params || !params.collection || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null){

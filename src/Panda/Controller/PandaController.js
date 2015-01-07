@@ -32,6 +32,25 @@ var PandaController = function(folderStructureEmitter, dbConnectionEmitter, dbPa
         folderStructureEmitter.emit('getFolders', params, success, error)
     })
 
+    self.on('getNearby', function(params, success, error){
+        dbConnectionEmitter.on('data', function(data){
+            self.buffer.push(data)
+        })
+
+        dbConnectionEmitter.on('close', function(){
+
+            var data = dbParseModule.parse(self.buffer, params)
+            self.emit('data', data)
+            self.emit('close')
+        })
+
+        dbConnectionEmitter.on('error', function(){
+            self.emit('error', {msg: "PandaController Error: dbConnection emitted error"})
+        })
+
+        dbConnectionEmitter.emit('getNearby', params)
+    })
+
 }
 util.inherits(PandaController, events.EventEmitter)
 
