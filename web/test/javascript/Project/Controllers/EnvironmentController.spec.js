@@ -220,31 +220,7 @@
                     })
                 })
 
-                describe('geneExplore function wrapper', function(){
-
-                    beforeEach(function(){
-                        $scope.environment.selectedGene = "AR"
-                        $scope.environment.selectedFile = {
-                            name: "Breast invasive carcinoma",
-                            tag:"BRCA",
-                            type:"MicroArray",
-                            collection:"MABRCA"
-                        }
-                    })
-
-                    it('should raise gene explore with environment variables', function(done){
-
-                        $scope.$on('geneExplore', function(event, params){
-                            expect(params.gene).toBe('AR')
-                            expect(params.collection).toBe("MABRCA")
-                            done()
-                        })
-
-                        $scope.geneExplore()
-                    })
-                })
-
-                describe('environment.searchTerm registered watcher', function(){
+                xdescribe('environment.searchTerm registered watcher', function(){
                     describe('when fired', function(){
 
                         describe('with empty string', function(){
@@ -481,11 +457,35 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.visualizeGraph({file:"foo"})
                         })
 
-                        it('should fire visualizeGraph event', function(){
-                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {file:"foo"})
+                        describe('with no gene focus', function(){
+
+                            beforeEach(function(){
+                                $scope.visualizeGraph({collection:"foo"})
+                            })
+                            it('should fire visualizeGraph event', function(){
+                                expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {collection:"foo"})
+                            })
+                        })
+
+                        describe('with gene focus', function(){
+
+                            var expected
+
+                            beforeEach(function(){
+                                $scope.environment.selectedGene = "bar"
+                                expected ={
+                                    gene: "bar",
+                                    collection: "foo"
+                                }
+
+                                $scope.visualizeGraph({collection:"foo"})
+
+                            })
+                            it('should fire geneExplore event', function(){
+                                expect($scope.$emit).toHaveBeenCalledWith('geneExplore', expected)
+                            })
                         })
                     })
                 })

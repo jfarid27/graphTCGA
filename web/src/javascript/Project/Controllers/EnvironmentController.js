@@ -119,14 +119,15 @@
             })
 
             $scope.visualizeGraph = function(file){
-                $scope.$emit('visualizeGraph', file)
-            }
+                if($scope.environment.selectedGene){
+                    $scope.$emit('geneExplore', {
+                        gene: $scope.environment.selectedGene,
+                        collection: file.collection
+                    })
+                } else {
 
-            $scope.geneExplore = function(){
-                $scope.$emit('geneExplore',{
-                    gene: $scope.environment.selectedGene,
-                    collection: $scope.environment.selectedFile.collection
-                })
+                    $scope.$emit('visualizeGraph', file)
+                }
             }
 
             $scope.downloadGraph = function(file){
