@@ -62,6 +62,69 @@ describe('PandaController', function(){
 
     })
 
+    describe('on getNearby event', function(){
+
+        var Controller
+
+        beforeEach(function(){
+            Controller = new pandaControllerClass(mockFolderStructureEmitter, mockDBConnectionEmitter, mockDbParseModule)
+        })
+
+
+        it('should emit getNearby on dbConnection', function(done){
+            mockDBConnectionEmitter.on('getNearby', function(params){
+                params.data.should.eql('foo')
+                done()
+            })
+
+            Controller.emit('getNearby', {data:'foo'})
+        })
+
+        describe('on DBConnection data event', function(){
+
+            beforeEach(function(){
+                Controller.emit('getNearby', {data:'foo'})
+            })
+
+            it('should buffer response data', function(){
+                mockDBConnectionEmitter.emit('data', 'foo')
+                Controller.buffer.length.should.eql(1)
+                Controller.buffer.should.containEql('foo')
+            })
+        })
+
+        describe('on DBConnection close event', function(){
+
+            var result
+
+            afterEach(function(){
+                result = undefined
+            })
+            it('should emit data event with parsed data', function(done){
+                Controller.on('data', function(data){
+                    data.should.eql('foo')
+                })
+
+                Controller.on('close', function(){
+                    done()
+                })
+
+                Controller.emit('getNearby', {data:'foo'})
+
+                mockDBConnectionEmitter.emit('close')
+            })
+        })
+
+        describe('on DBConnection error event', function(){
+            it('should emit error event', function(done){
+                Controller.on('error', function(){ done() })
+                Controller.emit('getNearby', {data:'foo'})
+
+                mockDBConnectionEmitter.emit('error')
+            })
+        })
+    })
+
     describe('on getFile event', function(){
 
 
@@ -120,7 +183,7 @@ describe('PandaController', function(){
         })
 
         describe('on DBConnection error event', function(){
-            it('should call error', function(done){
+            it('should emit error', function(done){
 
                 Controller.on('error', function(){ done() })
                 Controller.emit('getFile', {data:'foo'})
