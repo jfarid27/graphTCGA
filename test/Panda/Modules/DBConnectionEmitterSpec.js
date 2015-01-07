@@ -99,6 +99,114 @@ describe('DBConnectionEmitter', function () {
         mockResolvedQuery = undefined
         mockCollectionFailingDBClient = undefined
     })
+
+    describe('on getNearby event', function(){
+
+        var cleanParams = {
+            gene: "HNF1B",
+            collection: "MABRCA"
+        }
+
+        describe('on database connection failure', function(){
+
+            beforeEach(function(){
+                DBConnection = new DBConnectionEmitter('foo', mockFailingDBClient)
+            })
+
+            afterEach(function(){
+                DBConnection = undefined
+            })
+
+
+            it('should emit an error', function(done){
+                DBConnection.on('error', function () {
+                    done()
+                })
+
+                DBConnection.emit('getNearby', cleanParams)
+            })
+        })
+
+        describe('on proper database connection', function(){
+
+            describe('if collection for query does not exist', function(){
+
+                beforeEach(function(){
+                    DBConnection = new DBConnectionEmitter('foo', mockCollectionFailingDBClient)
+                })
+
+                afterEach(function(){
+                    DBConnection = undefined
+                })
+
+
+                it('should emit an error', function(done){
+
+                    DBConnection.on('error', function () {
+                        done()
+                    })
+
+                    DBConnection.emit('getNearby', cleanParams)
+
+                })
+            })
+
+            describe('if collection exists', function(){
+
+                beforeEach(function(){
+                    DBConnection = new DBConnectionEmitter('foo', mockDBClient)
+                })
+
+                afterEach(function(){
+                    DBConnection = undefined
+                })
+
+                it('should query database using params', function(){
+                    DBConnection.emit('getNearby', cleanParams)
+                    mockResolvedQuery.$resolved.should.eql(true)
+                })
+                describe('on cursor stream data event', function(done){
+                    it('should emit data', function(done){
+                        DBConnection.on('data', function(data){
+                            mockResolvedQuery.$resolved.should.eql(true)
+                            data.should.eql('foo')
+                            done()
+                        })
+
+                        DBConnection.emit('getNearby', cleanParams)
+
+                        mockCursorStream.emit('data', 'foo')
+                    })
+                })
+
+                describe('on cursor stream close event', function(){
+                    it('should close the database', function(done){
+                        DBConnection.on('close', function(data){
+                            mockResolvedQuery.$resolved.should.eql(true)
+                            done()
+                        })
+
+                        DBConnection.emit('getNearby', cleanParams)
+
+                        mockCursorStream.emit('close')
+                    })
+                    it('should emit close', function(done){
+                        DBConnection.on('close', function(){
+
+                            mockDBInstance.isOpen.should.eql(false)
+
+                            done()
+                        })
+
+                        DBConnection.emit('getNearby', cleanParams)
+
+                        mockCursorStream.emit('close')
+                    })
+                })
+            })
+        })
+    })
+
     describe('on getFile event', function () {
 
         describe('on database connection failure', function () {
