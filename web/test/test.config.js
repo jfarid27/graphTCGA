@@ -22,7 +22,8 @@ require.config({
         'angularMocks': 'node_modules/angular-mocks/angular-mocks',
         'jquery': '',
         'd3': 'bower_components/d3/d3',
-        'grammer': 'bower_components/grammer/src/javascript/grammer'
+        'grammer': 'bower_components/grammer/src/javascript/grammer',
+        'ngTable': 'bower_components/angular-smart-table/dist/smart-table.debug'
     },
 
     'shim': {
@@ -32,6 +33,9 @@ require.config({
         'angularMocks': {
             'deps': ['angular'],
             'exports': 'inject'
+        },
+        'ngTable': {
+            'deps': ['angular']
         },
         'jquery':{
             'exports': 'jquery'

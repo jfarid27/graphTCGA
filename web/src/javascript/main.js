@@ -12,7 +12,8 @@ require.config({
                    'jquery'],
         'd3': ['/d3/d3'],
         'cytoscape': ['/cytoscape/dist/cytoscape'],
-        'grammer': ['/grammer/src/javascript/grammer']
+        'grammer': ['/grammer/src/javascript/grammer'],
+        'ngTable': ['/angular-smart-table/dist/smart-table.debug']
     },
     'shim': {
         'angular': {
@@ -34,7 +35,10 @@ require.config({
         },
         'grammer':{
             'exports': 'grammer'
-        }
+        },
+        'ngTable': {
+            'deps': ['angular']
+        },
     },
 
     'waitSeconds': 1
