@@ -74,6 +74,7 @@
 
                     Api.getFile(params).$promise.then(function(data){
                         $scope.environment.graph = data
+                        $scope.environment.displayEdges = [].concat(data.elements.edges)
                     })
                 }
             })
@@ -91,6 +92,7 @@
 
                     Api.getNearby(params).$promise.then(function(data){
                         $scope.environment.graph = data
+                        $scope.environment.displayEdges = [].concat(data.elements.edges)
                     })
                 }
             })
@@ -132,6 +134,14 @@
 
             $scope.downloadGraph = function(file){
                 $scope.$emit('downloadGraph', file)
+            }
+
+            $scope.itemsByPage=15;
+            $scope.getters = {
+                source: function(value){ return value.data.source},
+                target: function(value){ return value.data.target},
+                interaction: function(value){ return value.data.interaction},
+                zScore: function(value){ return value.data.zScore}
             }
 
         }
