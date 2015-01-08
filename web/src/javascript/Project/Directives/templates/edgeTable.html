@@ -1,0 +1,36 @@
+
+<h3>Interaction Table</h3>
+
+<table id="interaction-table" st-table="environment.displayEdges" st-safe-src="environment.graph.elements.edges" class="table table-striped">
+    <thead>
+        <tr>
+            <th st-sort="getters.source" st-sort-default>Source</th>
+            <th st-sort="getters.target">Target</th>
+            <th st-sort="getters.interaction">Interaction Weight</th>
+            <th st-sort="getters.zScore">Z-Score</th>
+        </tr>
+        <tr>
+			<th colspan="4">
+				<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+			</th>
+		</tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat='edge in environment.displayEdges'>
+
+            <td>{{edge.data.source}}</td>
+            <td>{{edge.data.target}}</td>
+            <td>{{edge.data.interaction}}</td>
+            <td>{{edge.data.zScore}}</td>
+        </tr>
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+
+</table>

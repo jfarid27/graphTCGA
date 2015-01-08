@@ -1,13 +1,48 @@
 
 <div class='panel fixed-height spaced'>
 
-    <h5 class="environment-interface-text">Network Demo:</h5>
-    <graph-visualization></graph-visualization>
+    <div class="row">
 
-    <h5 class="environment-interface-text">Z-Score Threshold:</h5>
-    <histogram-visualization></histogram-visualization>
 
-    <p>Z-Score Maximum Bound: {{environment.zScoreThreshold.max}} </p>
-    <p>Z-Score Minimum Bound: {{environment.zScoreThreshold.min}}</p>
+        <div class="large-6 columns">
+
+
+
+            <h5 class="environment-interface-text">Network Demo:</h5>
+            <graph-visualization></graph-visualization>
+
+        </div>
+
+        <div class="large-6 columns">
+
+            <div class="spaced">
+
+                <h5 class="environment-interface-text">Z-Score Threshold:</h5>
+                <histogram-visualization></histogram-visualization>
+
+                <p>Z-Score Max Bound: {{environment.zScoreThreshold.max | number:3}} </p>
+                <p>Z-Score Min Bound: {{environment.zScoreThreshold.min | number:3}}</p>
+
+                <label>TCGA Type:
+                    <select ng-options="item.name for item in environment.availableFolders" ng-model="environment.selectedFolder">
+                    </select>
+                </label>
+
+                <label>TCGA Dataset:
+                    <select ng-options="item.name for item in environment.availableFiles" ng-model="environment.selectedFile">
+                    </select>
+                </label>
+
+                <label>Gene Focus:
+                    <input type="text" placeholder="(Leave Blank for No Focus)" ng-model="environment.selectedGene"/>
+                </label>
+
+                <a href="#" ng-click="visualizeGraph(environment.selectedFile)" class="button expand">Visualize Demo</a>
+                <a href="#" class="button expand">Download Network</a>
+
+            </div>
+
+        </div>
+    </div>
 
 </div>
