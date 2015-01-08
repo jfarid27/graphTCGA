@@ -39,7 +39,7 @@
                         return {
                             $promise: {
                                 then: function(success){
-                                    success({edges: ['blah', 'blah2']})
+                                    success({elements:{edges: ['blah', 'blah2']}})
                                 }
                             }
                         }
@@ -48,7 +48,7 @@
                         return {
                             $promise: {
                                 then: function(success){
-                                    success({edges: ['blah', 'blah2']})
+                                    success({elements:{edges: ['blah', 'blah2']}})
                                 }
                             }
                         }
@@ -214,8 +214,8 @@
 
                     describe('when api response is ok', function(){
                         it('should populate environment.graph with response', function(){
-                            expect($scope.environment.graph.edges).toContain('blah')
-                            expect($scope.environment.graph.edges).toContain('blah2')
+                            expect($scope.environment.graph.elements.edges).toContain('blah')
+                            expect($scope.environment.graph.elements.edges).toContain('blah2')
                         })
                     })
                 })
@@ -381,8 +381,8 @@
                         })
 
                         it('should populate environment.graph with response', function(){
-                            expect($scope.environment.graph.edges).toContain('blah')
-                            expect($scope.environment.graph.edges).toContain('blah2')
+                            expect($scope.environment.graph.elements.edges).toContain('blah')
+                            expect($scope.environment.graph.elements.edges).toContain('blah2')
                         })
                     })
                 })
