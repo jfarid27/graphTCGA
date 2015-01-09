@@ -33,6 +33,11 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
+                    zScore: {
+                        $gte:5.5,
+                        $lte:-5.5
+                    },
+                    interaction: 1,
                     $or:[
                         {
                             "source":params.gene
