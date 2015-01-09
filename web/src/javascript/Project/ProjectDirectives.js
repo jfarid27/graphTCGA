@@ -6,10 +6,10 @@
         './Directives/appHeader',
         './Directives/aboutSection',
         './Directives/histogramVisualization',
-        './Directives/searchInterface'
+        './Directives/edgeTable',
     ]
 
-    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection, addHistogramVisualization, addSearchInterface){
+    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection, addHistogramVisualization, addEdgeTable){
 
         return function(module){
 
@@ -18,7 +18,7 @@
             addAppHeader(module)
             addAboutSection(module)
             addHistogramVisualization(module)
-            addSearchInterface(module)
+            addEdgeTable(module)
 
         }
 

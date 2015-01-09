@@ -39,7 +39,16 @@
                         return {
                             $promise: {
                                 then: function(success){
-                                    success({edges: ['blah', 'blah2']})
+                                    success({elements:{edges: ['blah', 'blah2']}})
+                                }
+                            }
+                        }
+                    },
+                    getNearby: function(params){
+                        return {
+                            $promise: {
+                                then: function(success){
+                                    success({elements:{edges: ['blah', 'blah2']}})
                                 }
                             }
                         }
@@ -178,7 +187,40 @@
                     })
                 })
 
-                describe('environment.searchTerm registered watcher', function(){
+                describe('geneExplore event', function(){
+
+                    beforeEach(function(){
+                        spyOn(Api, 'getNearby').and.callThrough()
+
+                        gene = {
+                            gene: "AR",
+                            collection:"MABRCA"
+                        }
+
+                        expected = {
+                            collection: "MABRCA",
+                            format: 'cytoscape',
+                            interactionThreshold: 1,
+                            gene: "AR"
+                        }
+
+                        $scope.$emit('geneExplore', gene)
+
+                    })
+
+                    it('should call api to get gene nearby network', function(){
+                        expect(Api.getNearby).toHaveBeenCalledWith(expected)
+                    })
+
+                    describe('when api response is ok', function(){
+                        it('should populate environment.graph with response', function(){
+                            expect($scope.environment.graph.elements.edges).toContain('blah')
+                            expect($scope.environment.graph.elements.edges).toContain('blah2')
+                        })
+                    })
+                })
+
+                xdescribe('environment.searchTerm registered watcher', function(){
                     describe('when fired', function(){
 
                         describe('with empty string', function(){
@@ -339,8 +381,8 @@
                         })
 
                         it('should populate environment.graph with response', function(){
-                            expect($scope.environment.graph.edges).toContain('blah')
-                            expect($scope.environment.graph.edges).toContain('blah2')
+                            expect($scope.environment.graph.elements.edges).toContain('blah')
+                            expect($scope.environment.graph.elements.edges).toContain('blah2')
                         })
                     })
                 })
@@ -415,11 +457,35 @@
 
                         beforeEach(function(){
                             spyOn($scope, '$emit')
-                            $scope.visualizeGraph({file:"foo"})
                         })
 
-                        it('should fire visualizeGraph event', function(){
-                            expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {file:"foo"})
+                        describe('with no gene focus', function(){
+
+                            beforeEach(function(){
+                                $scope.visualizeGraph({collection:"foo"})
+                            })
+                            it('should fire visualizeGraph event', function(){
+                                expect($scope.$emit).toHaveBeenCalledWith('visualizeGraph', {collection:"foo"})
+                            })
+                        })
+
+                        describe('with gene focus', function(){
+
+                            var expected
+
+                            beforeEach(function(){
+                                $scope.environment.selectedGene = "bar"
+                                expected ={
+                                    gene: "bar",
+                                    collection: "foo"
+                                }
+
+                                $scope.visualizeGraph({collection:"foo"})
+
+                            })
+                            it('should fire geneExplore event', function(){
+                                expect($scope.$emit).toHaveBeenCalledWith('geneExplore', expected)
+                            })
                         })
                     })
                 })

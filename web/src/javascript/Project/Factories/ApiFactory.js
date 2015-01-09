@@ -2,7 +2,7 @@
 
     define([], function(){
 
-        function ApiFactory(fileResource, folderResource){
+        function ApiFactory(fileResource, folderResource, edgeResource){
             return {
                 getFile: function(params){
                     return fileResource.get(params)
@@ -15,6 +15,9 @@
                 },
                 downloadGraph: function(params){
                     return fileResource.get(params)
+                },
+                getNearby: function(params){
+                    return edgeResource.get(params)
                 }
             }
         }

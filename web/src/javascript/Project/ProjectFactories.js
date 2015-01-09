@@ -21,7 +21,7 @@
 
                 return nGrams
             }])
-            .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource', ApiFactory])
+            .factory('Project.Api', ['Project.FileResource', 'Project.FolderResource', 'Project.EdgeResource', ApiFactory])
             .factory('Project.FileResource', ['$resource', function($resource){
                 return $resource('/file',{},{
                     get:{
@@ -34,6 +34,13 @@
             }])
             .factory('Project.FolderResource', ['$resource', function($resource){
                 return $resource('/folder',{},{
+                    get:{
+                        method:"GET"
+                    }
+                })
+            }])
+            .factory('Project.EdgeResource', ['$resource', function($resource){
+                return $resource('/interactions',{},{
                     get:{
                         method:"GET"
                     }

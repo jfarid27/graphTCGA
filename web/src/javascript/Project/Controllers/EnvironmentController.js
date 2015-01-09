@@ -74,6 +74,25 @@
 
                     Api.getFile(params).$promise.then(function(data){
                         $scope.environment.graph = data
+                        $scope.environment.displayEdges = [].concat(data.elements.edges)
+                    })
+                }
+            })
+
+            $scope.$on('geneExplore', function(event, search){
+
+                if(search.gene){
+
+                    var params = {
+                        collection: search.collection,
+                        gene: search.gene,
+                        interactionThreshold: 1,
+                        format: "cytoscape"
+                    }
+
+                    Api.getNearby(params).$promise.then(function(data){
+                        $scope.environment.graph = data
+                        $scope.environment.displayEdges = [].concat(data.elements.edges)
                     })
                 }
             })
@@ -102,11 +121,27 @@
             })
 
             $scope.visualizeGraph = function(file){
-                $scope.$emit('visualizeGraph', file)
+                if($scope.environment.selectedGene){
+                    $scope.$emit('geneExplore', {
+                        gene: $scope.environment.selectedGene,
+                        collection: file.collection
+                    })
+                } else {
+
+                    $scope.$emit('visualizeGraph', file)
+                }
             }
 
             $scope.downloadGraph = function(file){
                 $scope.$emit('downloadGraph', file)
+            }
+
+            $scope.itemsByPage=15;
+            $scope.getters = {
+                source: function(value){ return value.data.source},
+                target: function(value){ return value.data.target},
+                interaction: function(value){ return value.data.interaction},
+                zScore: function(value){ return value.data.zScore}
             }
 
         }

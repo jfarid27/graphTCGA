@@ -26,6 +26,7 @@
             self.graph = undefined
             self.searchTerm = undefined
             self.matchingTerms = undefined
+            self.displayEdges = undefined
         }
 
         return EnvironmentFactory
