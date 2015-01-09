@@ -33,17 +33,20 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
-                    zScore: {
-                        $gte:5.5,
-                        $lte:-5.5
-                    },
-                    interaction: 1,
                     $or:[
                         {
-                            "source":params.gene
+                            "source":params.gene,
+                            $or:  [
+                                {"zScore":{$gte:5.5}},
+                                {"zScore":{$lte:-5.5}}
+                            ],
                         },
                         {
-                            "target":params.gene
+                            "target":params.gene,
+                            $or:  [
+                                {"zScore":{$gte:5.5}},
+                                {"zScore":{$lte:-5.5}}
+                            ],
                         }
                     ]
                 }
