@@ -104,7 +104,9 @@ describe('DBConnectionEmitter', function () {
 
         var cleanParams = {
             gene: "HNF1B",
-            collection: "MABRCA"
+            collection: "MABRCA",
+            zScoreThresholdMin: -6,
+            zScoreThresholdMax: -5.5
         }
 
         describe('on database connection failure', function(){
