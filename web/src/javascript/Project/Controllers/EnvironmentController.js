@@ -62,14 +62,16 @@
             })
 
             $scope.$on('visualizeGraph', function(event, file){
-                if (file){
+                if (file &&
+                    $scope.environment.zScoreThreshold.max &&
+                    $scope.environment.zScoreThreshold.min){
 
                     var params = {
                         collection: file.collection,
                         format: "cytoscape",
                         interactionThreshold: 1,
-                        zScoreThresholdMin: -5.5,
-                        zScoreThresholdMax: 5.5
+                        zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
+                        zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
                     }
 
                     Api.getFile(params).$promise.then(function(data){
@@ -80,13 +82,17 @@
             })
 
             $scope.$on('geneExplore', function(event, search){
-
-                if(search.gene){
+                if(search.gene &&
+                  $scope.environment.zScoreThreshold &&
+                  $scope.environment.zScoreThreshold.max &&
+                  $scope.environment.zScoreThreshold.min){
 
                     var params = {
                         collection: search.collection,
                         gene: search.gene,
                         interactionThreshold: 1,
+                        zScoreThresholdMin: $scope.environment.zScoreThreshold.min,
+                        zScoreThresholdMax: $scope.environment.zScoreThreshold.max,
                         format: "cytoscape"
                     }
 

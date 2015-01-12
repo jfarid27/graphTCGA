@@ -12,7 +12,7 @@
                     top: 30,
                     bottom: 60,
                     left: 10,
-                    right: 60
+                    right: 100
                 }
             }
 
@@ -32,7 +32,7 @@
                     .attr('height', 4)
                   .append('path')
                     .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', '#af1212')
+                    .attr('stroke', 'rgb(214, 0, 0)')
                     .attr('stroke-width', 1);
 
                 var histogram = _selection.append('g')
@@ -47,18 +47,18 @@
                 var axisHeight = params.height - params.margin.top - params.margin.bottom - 30
 
                 var xScale = d3.scale.linear()
-                    .domain([d3.min(data, function(d){ return d.x }), d3.max(data, function(d){ return d.x })+1])
+                    .domain([d3.min(data, function(d){ return d.x }), d3.max(data, function(d){ return d.x }) + .25])
                     .range([params.margin.left, params.margin.left + axisWidth])
 
-                var yScale = d3.scale.linear()
+                var yScale = d3.scale.log()
                     .domain([d3.min(data, function(d){ return d.y }), d3.max(data, function(d){ return d.y })])
                     .range([params.margin.top + axisHeight, params.margin.top])
 
-                var xAxis = d3.svg.axis().scale(xScale),
+                var xAxis = d3.svg.axis().scale(xScale).tickValues([-6, -5, -4]),
                     yAxis = d3.svg.axis().scale(yScale).ticks(4).orient("right")
 
                 bars.selectAll('rect').data(data).enter().append('rect')
-                    .attr('width', xScale(1) - xScale(0) - 2)
+                    .attr('width', xScale(.25) - xScale(0) - 2)
                     .attr('height', function(d){return params.margin.top + axisHeight - yScale(d.y)})
                     .attr('x', function(d, i){return xScale(d.x)})
                     .attr('y',  function(d,i){return  yScale(d.y)})
@@ -76,7 +76,7 @@
 
                 brush = d3.svg.brush()
                     .x(xScale)
-                    .extent([-1, 1])
+                    .extent([-6, -5.5])
                     .on("brush", function(){
                         dispatch.brushing(brush)
                     });
@@ -101,7 +101,7 @@
                 legend.append('text')
                     .attr('x', params.margin.left)
                     .attr('y', 13)
-                    .text( "Range (Excluded) - ")
+                    .text( "Range (Included) - ")
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "12px")
                     .attr("fill", "black");
@@ -119,9 +119,9 @@
 
                 legend.append('text')
                     .classed('axis-label y-label', true)
-                    .attr('x', params.margin.left + (axisWidth) + 50 )
+                    .attr('x', params.margin.left + (axisWidth) + 75 )
                     .attr('y', params.margin.top + (axisHeight/2))
-                    .text( "(N)")
+                    .text( "log(n%)")
                     .attr("text-anchor", "middle")
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "14px")

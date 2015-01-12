@@ -12,11 +12,13 @@ function getInteractions(Controller){
         var params = {
             collection: request.param('collection'),
             gene: request.param('gene'),
+            zScoreThresholdMax: parseFloat(request.param('zScoreThresholdMax')),
+            zScoreThresholdMin: parseFloat(request.param('zScoreThresholdMin')),
             interactionThreshold: parseFloat(request.param('interactionThreshold')),
             format: request.param('format')
         }
 
-        if ( !params.collection || !params.interactionThreshold || !params.format || !params.gene ){
+        if ( !params.collection || !params.interactionThreshold || !params.format || !params.gene || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null ){
           var message= "Error: Missing request params!"
           response.status(501).json({error: message})
           return

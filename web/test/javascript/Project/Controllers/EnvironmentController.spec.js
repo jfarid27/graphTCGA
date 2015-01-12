@@ -99,21 +99,23 @@
                 }
 
 
-                Environment = function(){
-                    self.selectedFolder = undefined
-                    self.selectedFiles = undefined
-                    self.selectedType = undefined
-                    self.availableTypes = [
+                 Environment = {
+                    selectedFolder: undefined,
+                    selectedFiles: undefined,
+                    selectedType: undefined,
+                    availableTypes: [
                         {name:'.JSON', value:'json'},
                         {name:'.TSV', value:'tsv'},
                         {name:'Gephi', value:'gephi'},
                         {name:'Cytoscape', value:'cytoscape'}
-                    ]
-                    self.availableFolders = undefined
-                    self.availableFiles = undefined
-                    self.interactionThreshold = undefined
-                    self.zScoreThreshold = undefined
-                    self.graph = undefined
+                    ],
+                    availableFolders: undefined,
+                    availableFiles: undefined,
+                    interactionThreshold: 1,
+                    zScoreThreshold: {
+                        max:-5.5,
+                        min:-6.5
+                    }
                 }
 
                 spyOn(Api, 'getFolder').and.callThrough()
@@ -124,11 +126,10 @@
                     }
                 }
 
-
-                EnvironmentController($scope, new Environment, Api, mockWindow, mockLibrary)
-
+                EnvironmentController($scope, Environment, Api, mockWindow, mockLibrary)
 
             })
+
 
             describe('scope', function(){
 
@@ -201,6 +202,8 @@
                             collection: "MABRCA",
                             format: 'cytoscape',
                             interactionThreshold: 1,
+                            zScoreThresholdMin: -6.5,
+                            zScoreThresholdMax: -5.5,
                             gene: "AR"
                         }
 
@@ -361,15 +364,12 @@
                                 collection:"MABRCA"
                             }
 
-                            $scope.environment.interactionThreshold = 1
-                            $scope.environment.zScoreThreshold = {min:3, max: 12}
-
                             expected = {
                                 collection: "MABRCA",
                                 format: 'cytoscape',
                                 interactionThreshold: 1,
-                                zScoreThresholdMax: 5.5,
-                                zScoreThresholdMin: -5.5
+                                zScoreThresholdMax: -5.5,
+                                zScoreThresholdMin: -6.5
                             }
 
                             $scope.$emit('visualizeGraph', file)

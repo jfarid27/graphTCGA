@@ -9,7 +9,7 @@ function DBConnectionEmitter(dburl, dbClient){
 
 
     self.on('getNearby', function(params){
-        if (!params || !params.collection || !params.gene){
+        if (!params || !params.collection || !params.gene || params.zScoreThresholdMax == null || params.zScoreThresholdMin == null){
 
             self.emit('error', {msg: "DBConnectionEmitter Error: Missing getNearby params"})
             return
@@ -36,17 +36,31 @@ function DBConnectionEmitter(dburl, dbClient){
                     $or:[
                         {
                             "source":params.gene,
-                            $or:  [
-                                {"zScore":{$gte:5.5}},
-                                {"zScore":{$lte:-5.5}}
-                            ],
+                            $or:[{
+                                "zScore": {
+                                    $gt:+params.zScoreThresholdMin,
+                                    $lt:+params.zScoreThresholdMax
+                                }
+                            },{
+                                "zScore": {
+                                    $gt:-params.zScoreThresholdMax,
+                                    $lt:-params.zScoreThresholdMin
+                                }
+                            }]
                         },
                         {
                             "target":params.gene,
-                            $or:  [
-                                {"zScore":{$gte:5.5}},
-                                {"zScore":{$lte:-5.5}}
-                            ],
+                            $or:[{
+                                "zScore": {
+                                    $gt:+params.zScoreThresholdMin,
+                                    $lt:+params.zScoreThresholdMax
+                                }
+                            },{
+                                "zScore": {
+                                    $gt:-params.zScoreThresholdMax,
+                                    $lt:-params.zScoreThresholdMin
+                                }
+                            }]
                         }
                     ]
                 }
@@ -94,19 +108,18 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
-                    interaction:{$gte:params.interactionThreshold},
-                    $or:[
-                        {
-                            "zScore":{
-                                $gt:params.zScoreThresholdMax
-                            }
-                        },
-                        {
-                            "zScore":{
-                                $lt:params.zScoreThresholdMin
-                            }
+                    "interaction":{$gte:params.interactionThreshold},
+                    $or:[{
+                        "zScore": {
+                            $gt:+params.zScoreThresholdMin,
+                            $lt:+params.zScoreThresholdMax
                         }
-                    ]
+                    },{
+                        "zScore": {
+                            $gt:-params.zScoreThresholdMax,
+                            $lt:-params.zScoreThresholdMin
+                        }
+                    }]
                 }
 
                 var cursorStream = collection.find(query, {_id:0}).stream()
