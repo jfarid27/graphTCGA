@@ -41,11 +41,6 @@ function DBConnectionEmitter(dburl, dbClient){
                                     $gt:+params.zScoreThresholdMin,
                                     $lt:+params.zScoreThresholdMax
                                 }
-                            },{
-                                "zScore": {
-                                    $gt:-params.zScoreThresholdMax,
-                                    $lt:-params.zScoreThresholdMin
-                                }
                             }]
                         },
                         {
@@ -54,11 +49,6 @@ function DBConnectionEmitter(dburl, dbClient){
                                 "zScore": {
                                     $gt:+params.zScoreThresholdMin,
                                     $lt:+params.zScoreThresholdMax
-                                }
-                            },{
-                                "zScore": {
-                                    $gt:-params.zScoreThresholdMax,
-                                    $lt:-params.zScoreThresholdMin
                                 }
                             }]
                         }
@@ -109,17 +99,10 @@ function DBConnectionEmitter(dburl, dbClient){
 
                 var query = {
                     "interaction":{$gte:params.interactionThreshold},
-                    $or:[{
-                        "zScore": {
-                            $gt:+params.zScoreThresholdMin,
-                            $lt:+params.zScoreThresholdMax
-                        }
-                    },{
-                        "zScore": {
-                            $gt:-params.zScoreThresholdMax,
-                            $lt:-params.zScoreThresholdMin
-                        }
-                    }]
+                    "zScore": {
+                        $gt:+params.zScoreThresholdMin,
+                        $lt:+params.zScoreThresholdMax
+                    }
                 }
 
                 var cursorStream = collection.find(query, {_id:0}).stream()
