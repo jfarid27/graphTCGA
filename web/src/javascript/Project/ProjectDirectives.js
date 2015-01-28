@@ -7,9 +7,10 @@
         './Directives/aboutSection',
         './Directives/histogramVisualization',
         './Directives/edgeTable',
+        './Directives/barsVisualization'
     ]
 
-    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection, addHistogramVisualization, addEdgeTable){
+    define(deps, function(addGraphVisualization, addEnvironmentInterface, addAppHeader, addAboutSection, addHistogramVisualization, addEdgeTable, addBars){
 
         return function(module){
 
@@ -19,7 +20,7 @@
             addAboutSection(module)
             addHistogramVisualization(module)
             addEdgeTable(module)
-
+            addBars(module)
         }
 
     })
