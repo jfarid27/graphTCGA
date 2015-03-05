@@ -20,8 +20,8 @@
             self.allFiles = undefined
             self.interactionThreshold = undefined
             self.zScoreThreshold = {
-                max: -5.5,
-                min: -6
+                max: 6,
+                min: 5
             }
             self.graph = undefined
             self.searchTerm = undefined

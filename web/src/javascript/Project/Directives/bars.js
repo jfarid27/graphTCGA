@@ -2,9 +2,7 @@
 
     define(['d3'], function(d3){
 
-        if (!d3.custom){
-            d3.custom = {}
-        }
+        d3.custom = d3.custom ? d3.custom : {}
 
         d3.custom.bars = function module(){
 
@@ -27,16 +25,7 @@
 
             function exports(_selection){
 
-                _selection.append('defs')
-                  .append('pattern')
-                    .attr('id', 'diagonalHatch')
-                    .attr('patternUnits', 'userSpaceOnUse')
-                    .attr('width', 4)
-                    .attr('height', 4)
-                  .append('path')
-                    .attr('d', 'M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2')
-                    .attr('stroke', 'rgb(0, 200, 0)')
-                    .attr('stroke-width', 4);
+                _selection
 
                 var histogram = _selection.append('g')
                     .classed('histogram', true)
@@ -50,10 +39,10 @@
                 var axisHeight = params.height - params.margin.top - params.margin.bottom - 30
 
                 var xScale = d3.scale.linear()
-                    .domain([3-.25, 6 + .25])
+                    .domain([5-.25, 6 + .25])
                     .range([params.margin.left, params.margin.left + axisWidth])
 
-                var xAxis = d3.svg.axis().scale(xScale).tickValues([6, 5, 4, 3])
+                var xAxis = d3.svg.axis().scale(xScale).tickValues([6, 5.75, 5.5, 5.25, 5])
 
                 histogram.append("g")
                     .attr("class", "x axis")
@@ -74,7 +63,8 @@
                 gBrush.selectAll("rect")
                     .attr("height", axisHeight -1)
                     .attr('y', params.margin.top -3)
-                    .attr('fill', 'url(#diagonalHatch)');
+                    .attr('fill', '#BF272D')
+                    .attr('fill-opacity', '100%')
 
 
                 legend.append('rect')
@@ -82,7 +72,8 @@
                     .attr('width', 15)
                     .attr('x', params.margin.left + 110)
                     .attr('y', 0)
-                    .attr('fill', 'url(#diagonalHatch)');
+                    .attr('fill', '#BF272D')
+                    .attr('fill-opacity', '100%')
 
                 legend.append('text')
                     .attr('x', params.margin.left)
