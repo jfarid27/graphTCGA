@@ -21,6 +21,7 @@
                 <bars-visualization></bars-visualization>
 
                 <p>Z-Score Max Bound: {{environment.zScoreThreshold.max | number:3}} </p>
+
                 <p>Z-Score Min Bound: {{environment.zScoreThreshold.min | number:3}}</p>
 
                 <label>TCGA Type:
@@ -38,7 +39,7 @@
                 </label>
 
                 <a href="#" ng-click="visualizeGraph(environment.selectedFile)" class="button expand">Visualize Demo</a>
-                <a href="#" class="button expand">Download Network</a>
+                <a href="#" ng-click="downloadGraph(environment.selectedFile)" class="button expand">Download Network</a>
 
             </div>
 
