@@ -4,14 +4,13 @@
 <table id="interaction-table" st-table="environment.displayEdges" st-safe-src="environment.graph.elements.edges" class="table table-striped">
     <thead>
         <tr>
-            <th st-sort="getters.source" st-sort-default>Source</th>
+            <th st-sort="getters.source" st-sort-default>Transcription Factor</th>
             <th st-sort="getters.target">Target</th>
-            <th st-sort="getters.interaction">Interaction Weight</th>
             <th st-sort="getters.zScore">Z-Score</th>
         </tr>
         <tr>
 			<th colspan="4">
-				<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+				<input st-search placeholder="Filter by Transcription Factor:" class="input-sm form-control" type="search"/>
 			</th>
 		</tr>
     </thead>
@@ -20,7 +19,6 @@
 
             <td>{{edge.data.source}}</td>
             <td>{{edge.data.target}}</td>
-            <td>{{edge.data.interaction}}</td>
             <td>{{edge.data.zScore}}</td>
         </tr>
     </tbody>

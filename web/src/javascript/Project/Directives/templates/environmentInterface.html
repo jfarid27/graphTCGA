@@ -18,10 +18,7 @@
             <div class="spaced">
 
                 <h5 class="environment-interface-text">Z-Score Threshold:</h5>
-                <histogram-visualization></histogram-visualization>
-
-                <p>Z-Score Max Bound: {{environment.zScoreThreshold.max | number:3}} </p>
-                <p>Z-Score Min Bound: {{environment.zScoreThreshold.min | number:3}}</p>
+                <bars-visualization></bars-visualization>
 
                 <label>TCGA Type:
                     <select ng-options="item.name for item in environment.availableFolders" ng-model="environment.selectedFolder">
@@ -38,7 +35,7 @@
                 </label>
 
                 <a href="#" ng-click="visualizeGraph(environment.selectedFile)" class="button expand">Visualize Demo</a>
-                <a href="#" class="button expand">Download Network</a>
+                <a href="#" ng-click="downloadGraph(environment.selectedFile)" class="button expand">Download Network</a>
 
             </div>
 

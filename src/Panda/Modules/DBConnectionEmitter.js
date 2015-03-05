@@ -36,29 +36,21 @@ function DBConnectionEmitter(dburl, dbClient){
                     $or:[
                         {
                             "source":params.gene,
+                            "interaction" : 1,
                             $or:[{
                                 "zScore": {
                                     $gt:+params.zScoreThresholdMin,
                                     $lt:+params.zScoreThresholdMax
-                                }
-                            },{
-                                "zScore": {
-                                    $gt:-params.zScoreThresholdMax,
-                                    $lt:-params.zScoreThresholdMin
                                 }
                             }]
                         },
                         {
                             "target":params.gene,
+                            "interaction" : 1,
                             $or:[{
                                 "zScore": {
                                     $gt:+params.zScoreThresholdMin,
                                     $lt:+params.zScoreThresholdMax
-                                }
-                            },{
-                                "zScore": {
-                                    $gt:-params.zScoreThresholdMax,
-                                    $lt:-params.zScoreThresholdMin
                                 }
                             }]
                         }
@@ -108,18 +100,11 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
-                    "interaction":{$gte:params.interactionThreshold},
-                    $or:[{
-                        "zScore": {
-                            $gt:+params.zScoreThresholdMin,
-                            $lt:+params.zScoreThresholdMax
-                        }
-                    },{
-                        "zScore": {
-                            $gt:-params.zScoreThresholdMax,
-                            $lt:-params.zScoreThresholdMin
-                        }
-                    }]
+                    "interaction":1,
+                    "zScore": {
+                        $gt:+params.zScoreThresholdMin,
+                        $lt:+params.zScoreThresholdMax
+                    }
                 }
 
                 var cursorStream = collection.find(query, {_id:0}).stream()
