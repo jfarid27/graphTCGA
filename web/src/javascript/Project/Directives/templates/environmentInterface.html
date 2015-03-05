@@ -20,10 +20,6 @@
                 <h5 class="environment-interface-text">Z-Score Threshold:</h5>
                 <bars-visualization></bars-visualization>
 
-                <p>Z-Score Max Bound: {{environment.zScoreThreshold.max | number:3}} </p>
-
-                <p>Z-Score Min Bound: {{environment.zScoreThreshold.min | number:3}}</p>
-
                 <label>TCGA Type:
                     <select ng-options="item.name for item in environment.availableFolders" ng-model="environment.selectedFolder">
                     </select>

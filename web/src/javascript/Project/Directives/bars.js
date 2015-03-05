@@ -64,30 +64,13 @@
                     .attr("height", axisHeight -1)
                     .attr('y', params.margin.top -3)
                     .attr('fill', '#BF272D')
-                    .attr('fill-opacity', '100%')
-
-
-                legend.append('rect')
-                    .attr('height', 15)
-                    .attr('width', 15)
-                    .attr('x', params.margin.left + 110)
-                    .attr('y', 0)
-                    .attr('fill', '#BF272D')
-                    .attr('fill-opacity', '100%')
-
-                legend.append('text')
-                    .attr('x', params.margin.left)
-                    .attr('y', 13)
-                    .text( "Range (Included) - ")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", "12px")
-                    .attr("fill", "black");
+                    .attr('fill-opacity', '100%');
 
                 legend.append('text')
                     .classed('axis-label x-label', true)
                     .attr('x', params.margin.left + (axisWidth/2) )
                     .attr('y', params.margin.top + axisHeight + 34)
-                    .text( "Z-Score")
+                    .text( "Z-Score Range (Click And Drag)")
                     .attr("text-anchor", "middle")
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "14px")

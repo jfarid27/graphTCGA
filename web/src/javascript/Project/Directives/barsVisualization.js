@@ -13,11 +13,11 @@
                     link: function(scope, element, attributes){
 
                         var params = {
-                            width:300,
+                            width:500,
                             height:140
                         }
 
-                        var svg = d3.select("#bars").append('svg')
+                        var svg = d3.select("#bars")
                             .attr("width", params.width)
                             .attr("height", params.height)
 
