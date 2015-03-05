@@ -36,6 +36,7 @@ function DBConnectionEmitter(dburl, dbClient){
                     $or:[
                         {
                             "source":params.gene,
+                            "interaction" : 1,
                             $or:[{
                                 "zScore": {
                                     $gt:+params.zScoreThresholdMin,
@@ -45,6 +46,7 @@ function DBConnectionEmitter(dburl, dbClient){
                         },
                         {
                             "target":params.gene,
+                            "interaction" : 1,
                             $or:[{
                                 "zScore": {
                                     $gt:+params.zScoreThresholdMin,
@@ -98,7 +100,7 @@ function DBConnectionEmitter(dburl, dbClient){
                 }
 
                 var query = {
-                    "interaction":{$gte:params.interactionThreshold},
+                    "interaction":1,
                     "zScore": {
                         $gt:+params.zScoreThresholdMin,
                         $lt:+params.zScoreThresholdMax
