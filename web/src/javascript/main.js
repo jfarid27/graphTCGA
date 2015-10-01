@@ -13,7 +13,7 @@ require.config({
         'd3': ['/d3/d3'],
         'cytoscape': ['/cytoscape/dist/cytoscape'],
         'grammer': ['/grammer/src/javascript/grammer'],
-        'ngTable': ['/angular-smart-table/dist/smart-table.debug']
+        'ngTable': ['/angular-smart-table/dist/smart-table']
     },
     'shim': {
         'angular': {
